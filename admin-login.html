@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Case of Beauty</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #fdf6f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #FFB7C5;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #000;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 1.5rem;
+            color: #4A90E2;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="logo">
+            <img src="COB.jpeg" alt="Case of Beauty" style="height: 80px;">
+        </div>
+        <h2 style="margin-bottom: 1.5rem; font-weight: 500;">Admin Access</h2>
+
+        <form id="admin-login-form">
+            <div class="form-group">
+                <label>Administrator Email</label>
+                <input type="email" id="email" required placeholder="admin@caseofbeauty.com">
+            </div>
+            <div class="form-group">
+                <label>Security Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-login">Login to Dashboard</button>
+        </form>
+
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Storefront</a>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        document.getElementById('admin-login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const success = await DataManager.login(email, password);
+            if (success) {
+                if (SessionManager.isAdmin()) {
+                    window.location.href = 'admin.html';
+                } else {
+                    alert('Access denied. This portal is for Administrators only.');
+                    SessionManager.logout();
+                }
+            } else {
+                alert('Invalid administrator credentials.');
+            }
+        };
+
+        // Redirect if already logged in as admin
+        if (SessionManager.isLoggedIn() && SessionManager.isAdmin()) {
+            window.location.href = 'admin.html';
+        }
+    </script>
+</body>
+
+</html>

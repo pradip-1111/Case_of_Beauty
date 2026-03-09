@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Case of Beauty</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="my-orders-page">
+
+    <!-- Top bar -->
+    <div class="checkout-topbar">
+        <a href="index.html" class="checkout-back-link"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+        <div class="checkout-logo"><img src="COB.jpeg" alt="Case of Beauty" style="height:48px;"></div>
+        <div style="width:140px;"></div>
+    </div>
+
+    <div class="my-orders-container">
+        <div class="my-orders-header">
+            <h1><i class="fas fa-box-open"></i> My Orders</h1>
+            <p>Track all your purchases in one place.</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="orders-filter-tabs">
+            <button class="filter-tab active" onclick="filterOrders('all', this)">All</button>
+            <button class="filter-tab" onclick="filterOrders('Pending', this)">Pending</button>
+            <button class="filter-tab" onclick="filterOrders('Processing', this)">Processing</button>
+            <button class="filter-tab" onclick="filterOrders('Shipped', this)">Shipped</button>
+            <button class="filter-tab" onclick="filterOrders('Delivered', this)">Delivered</button>
+        </div>
+
+        <!-- Orders List -->
+        <div id="orders-list">
+            <div class="orders-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Fetching your orders...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        let allOrders = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!SessionManager.isLoggedIn()) {
+                alert('Please login to view your orders.');
+                window.location.href = 'index.html';
+                return;
+            }
+            await loadOrders();
+        });
+
+        async function loadOrders() {
+            try {
+                const res = await fetch(`${API_URL}/orders/mine`, {
+                    headers: { 'x-auth-token': SessionManager.getToken() }
+                });
+                allOrders = await res.json();
+                renderOrders(allOrders);
+            } catch (err) {
+                console.error(err);
+                renderOrders([]);
+            }
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'Pending': 'fas fa-clock',
+                'Processing': 'fas fa-cog fa-spin',
+                'Shipped': 'fas fa-shipping-fast',
+                'Delivered': 'fas fa-check-circle',
+            };
+            return icons[status] || 'fas fa-circle';
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'Pending': 'status-pending',
+                'Processing': 'status-processing',
+                'Shipped': 'status-shipped',
+                'Delivered': 'status-delivered',
+            };
+            return classes[status] || 'status-pending';
+        }
+
+        function renderOrders(orders) {
+            const list = document.getElementById('orders-list');
+
+            if (!orders || orders.length === 0) {
+                list.innerHTML = `
+                    <div class="orders-empty">
+                        <i class="fas fa-box-open" style="font-size:4rem; color:#FFB7C5; margin-bottom:1rem;"></i>
+                        <h3>No orders found</h3>
+                        <p>You haven't placed any orders yet.</p>
+                        <a href="index.html" class="btn-shop-now">Shop Now</a>
+                    </div>`;
+                return;
+            }
+
+            list.innerHTML = orders.map(order => {
+                const dateStr = order.created_at ? new Date(order.created_at).toLocaleDateString('en-IN', {
+                    day: '2-digit', month: 'short', year: 'numeric'
+                }) : 'N/A';
+                const statusClass = getStatusClass(order.status);
+                const statusIcon = getStatusIcon(order.status);
+                const hasAddress = order.shipping_name || order.shipping_address;
+
+                return `
+                <div class="order-card" data-status="${order.status}">
+                    <div class="order-card-header">
+                        <div class="order-id-section">
+                            <span class="order-id-label">ORDER ID</span>
+                            <span class="order-id-value">#${order.id ? order.id.slice(-8).toUpperCase() : 'N/A'}</span>
+                        </div>
+                        <div class="order-date-section">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>${dateStr}</span>
+                        </div>
+                        <span class="order-status-badge ${statusClass}">
+                            <i class="${statusIcon}"></i> ${order.status}
+                        </span>
+                    </div>
+
+                    <div class="order-card-body">
+                        <div class="order-product-section">
+                            ${order.productImage ? `<img src="${order.productImage}" alt="${order.productName}" class="order-product-img">` : '<div class="order-product-img-placeholder"><i class="fas fa-box"></i></div>'}
+                            <div class="order-product-info">
+                                <div class="order-product-name">${order.productName || 'Product'}</div>
+                                <div class="order-product-qty">Qty: ${order.quantity || 1}</div>
+                                <div class="order-product-price">₹${parseFloat(order.price || 0).toFixed(2)}</div>
+                            </div>
+                        </div>
+
+                        ${hasAddress ? `
+                        <div class="order-address-section">
+                            <div class="order-address-label"><i class="fas fa-map-marker-alt"></i> Delivering to</div>
+                            <div class="order-address-text">
+                                <strong>${order.shipping_name}</strong>${order.shipping_phone ? ` · ${order.shipping_phone}` : ''}<br>
+                                ${order.shipping_address ? `${order.shipping_address}, ` : ''}${order.shipping_city || ''}${order.shipping_state ? `, ${order.shipping_state}` : ''}${order.shipping_pincode ? ` - ${order.shipping_pincode}` : ''}
+                            </div>
+                        </div>` : ''}
+                    </div>
+
+                    <!-- Status Timeline -->
+                    <div class="order-timeline">
+                        <div class="timeline-step ${['Pending', 'Processing', 'Shipped', 'Delivered'].includes(order.status) ? 'done' : ''}">
+                            <div class="timeline-dot"><i class="fas fa-check"></i></div>
+                            <span>Placed</span>
+                        </div>
+                        <div class="timeline-line ${['Processing', 'Shipped', 'Delivered'].includes(order.status) ? 'done' : ''}"></div>
+                        <div class="timeline-step ${['Processing', 'Shipped', 'Delivered'].includes(order.status) ? 'done' : ''}">
+                            <div class="timeline-dot"><i class="fas fa-cog"></i></div>
+                            <span>Processing</span>
+                        </div>
+                        <div class="timeline-line ${['Shipped', 'Delivered'].includes(order.status) ? 'done' : ''}"></div>
+                        <div class="timeline-step ${['Shipped', 'Delivered'].includes(order.status) ? 'done' : ''}">
+                            <div class="timeline-dot"><i class="fas fa-shipping-fast"></i></div>
+                            <span>Shipped</span>
+                        </div>
+                        <div class="timeline-line ${order.status === 'Delivered' ? 'done' : ''}"></div>
+                        <div class="timeline-step ${order.status === 'Delivered' ? 'done' : ''}">
+                            <div class="timeline-dot"><i class="fas fa-home"></i></div>
+                            <span>Delivered</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function filterOrders(status, btn) {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            if (status === 'all') {
+                renderOrders(allOrders);
+            } else {
+                renderOrders(allOrders.filter(o => o.status === status));
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Case of Beauty Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="admin-page">
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar-modern">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <img src="COB.jpeg" alt="Case of Beauty" style="height: 50px; display: block; margin-bottom: 5px;">
+                </div>
+                <div class="brand-tag">Management Portal</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li onclick="switchTab('dashboard')" class="active" id="nav-dashboard">
+                        <i class="fas fa-th-large"></i> <span>Dashboard</span>
+                    </li>
+                    <li onclick="switchTab('products')" id="nav-products">
+                        <i class="fas fa-box"></i> <span>Products</span>
+                    </li>
+                    <li onclick="switchTab('orders')" id="nav-orders">
+                        <i class="fas fa-shopping-cart"></i> <span>Orders</span>
+                    </li>
+                    <li onclick="switchTab('users')" id="nav-users">
+                        <i class="fas fa-users-cog"></i> <span>Users</span>
+                    </li>
+                    <div class="nav-divider">WEBSITE CONTENT</div>
+                    <li onclick="switchTab('banners')" id="nav-banners">
+                        <i class="fas fa-image"></i> <span>Banners</span>
+                    </li>
+                    <li onclick="switchTab('categories')" id="nav-categories">
+                        <i class="fas fa-tags"></i> <span>Categories</span>
+                    </li>
+                    <li onclick="switchTab('sales')" id="nav-sales">
+                        <i class="fas fa-clock"></i> <span>Flash Sales</span>
+                    </li>
+                    <li onclick="switchTab('videos')" id="nav-videos">
+                        <i class="fas fa-play-circle"></i> <span>Videos</span>
+                    </li>
+                    <li onclick="switchTab('reviews')" id="nav-reviews">
+                        <i class="fas fa-comment-alt"></i> <span>Reviews</span>
+                    </li>
+                    <li onclick="switchTab('settings')" id="nav-settings">
+                        <i class="fas fa-cog"></i> <span>Site Settings</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="index.html" class="btn-outline-sm"><i class="fas fa-arrow-left"></i> Main Site</a>
+                <button onclick="SessionManager.logout()" class="logout-btn"><i
+                        class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-workspace">
+            <!-- Top Header -->
+            <header class="workspace-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search anything...">
+                </div>
+                <div class="header-right">
+                    <a href="index.html" class="btn-workspace-visit"><i class="fas fa-external-link-alt"></i> Visit
+                        Website</a>
+                    <div class="user-profile">
+                        <span class="admin-badge">Admin</span>
+                        <div class="avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="workspace-content">
+                <!-- Dashboard Statistics (Home Tab) -->
+                <div id="dashboard-section" class="tab-content active">
+                    <div class="header-action">
+                        <h2>Analytics Overview</h2>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon pink"><i class="fas fa-shopping-bag"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Total Revenue</span>
+                                <h3 id="stat-revenue">₹0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="fas fa-box-open"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Total Products</span>
+                                <h3 id="stat-products">0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><i class="fas fa-truck"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Total Orders</span>
+                                <h3 id="stat-orders">0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple"><i class="fas fa-user-friends"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Total Users</span>
+                                <h3 id="stat-users">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-grid">
+                        <div class="recent-card">
+                            <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                            <div class="activity-list" id="recent-activity-list">
+                                <p class="empty-state">Loading latest activities...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shared Section for CRUD (Products, Users, etc.) -->
+                <div id="crud-section" class="tab-content">
+                    <div class="header-action">
+                        <h2 id="crud-title">Management</h2>
+                        <button class="btn-modern-primary" id="add-btn" onclick="openModal()">+ Add New</button>
+                    </div>
+
+                    <div class="table-card glass-morphism">
+                        <table id="dynamic-table">
+                            <thead id="table-head"></thead>
+                            <tbody id="table-body"></tbody>
+                        </table>
+                        <div id="loader" class="loader-container" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modern Admin Modal -->
+    <div id="admin-modal" class="modal-modern">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modal-title">Edit Item</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="admin-form">
+                <input type="hidden" id="item-id">
+                <input type="hidden" id="item-type">
+
+                <div id="form-fields" class="modern-form-grid">
+                    <!-- Dynamic fields injected here -->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-modern-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

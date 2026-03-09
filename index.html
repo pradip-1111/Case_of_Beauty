@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case of Beauty</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-header {
+            padding: 1rem 0;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background: #FFB7C5;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .add-hero-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Buy Any 3 At ₹999
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="COB.jpeg" alt="Case of Beauty" style="height: 60px; vertical-align: middle;">
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#shop" class="nav-link">Shop All</a></li>
+                    <li><a href="#insta-viral" class="nav-link">#InstaViral 🔥</a></li>
+                    <li><a href="#categories" class="nav-link">Shop By ⌵</a></li>
+                    <li><a href="#new-launches" class="nav-link" style="color: #4A90E2;">Hello Kitty (New)</a></li>
+                    <li><a href="#shop" class="nav-link" onclick="filterByCategory('Sunscreens')">Sunscreens</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <i class="fas fa-search"></i>
+                <div class="user-dropdown">
+                    <i class="fas fa-user-circle" id="profile-btn" onclick="toggleProfileModal()"
+                        style="display:none; cursor:pointer; font-size:1.2rem;"></i>
+                    <i class="fas fa-user" id="auth-btn" onclick="toggleAuthModal()"></i>
+                </div>
+                <div class="cart-icon-wrapper" onclick="openCart()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-badge" class="cart-badge" style="display:none;">0</span>
+                </div>
+                <button id="admin-link" onclick="location.href='admin.html'"
+                    style="display:none; background: #FFB7C5; border:none; border-radius:4px; padding: 5px 10px; cursor:pointer; font-weight:600;">Admin</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner Slider -->
+    <section class="banner-slider">
+        <button id="add-herb-btn" class="add-hero-btn" style="display:none;" onclick="triggerHeroUpload()">
+            <i class="fas fa-plus"></i> Add Slide
+        </button>
+        <input type="file" id="hero-upload-input" style="display:none;" accept="image/*"
+            onchange="handleHeroUpload(this)">
+        <div id="banner-container" class="banner-container">
+            <!-- Banners injected by JS -->
+            <div class="banner-slide active"
+                style="background-image: url('https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=1200&q=80')">
+                <div class="banner-content">
+                    <h2 class="banner-title">Viral Mochi Milky Toner</h2>
+                    <p class="banner-subtitle">Brighter, Softer Skin. Hello Kitty Edition.</p>
+                    <a href="#shop" class="cta-btn">SHOP NOW</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flash Sale Banner -->
+    <div id="flash-sale-banner" class="flash-sale-banner" style="display: none;">
+        <div class="sale-content">
+            <span id="sale-title">FLASH SALE</span>
+            <span class="sale-discount" id="sale-discount">50% OFF</span>
+            <div class="countdown" id="countdown">
+                <div><span id="days">00</span><small>Days</small></div>
+                <div><span id="hours">00</span><small>Hrs</small></div>
+                <div><span id="minutes">00</span><small>Min</small></div>
+                <div><span id="seconds">00</span><small>Sec</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marquee -->
+    <div class="marquee-bar">
+        <div class="marquee-content">
+            <span class="marquee-item">😲 Case of Beauty 😜</span>
+            <span class="marquee-item">😍 Case of Beauty 😍</span>
+            <span class="marquee-item">😎 Case of Beauty 😲</span>
+            <span class="marquee-item">😲 Case of Beauty 😜</span>
+            <span class="marquee-item">😍 Case of Beauty 😍</span>
+            <span class="marquee-item">😎 Case of Beauty 😲</span>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-seedling"></i></div>
+            <span>100%<br>VEGAN</span>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-hand-holding-heart"></i></div>
+            <span>SAFE<br>INGREDIENTS</span>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-flask"></i></div>
+            <span>PARABEN<br>FREE</span>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon"><i class="fas fa-paw"></i></div>
+            <span>CRUELTY<br>FREE</span>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories container">
+        <h2 class="section-title">Explore By Categories</h2>
+        <div class="category-grid" id="category-container">
+            <!-- Categories injected by JS -->
+        </div>
+    </section>
+
+    <!-- New Launches -->
+    <section id="new-launches" class="new-launches container">
+        <h2 class="section-title">New Launches</h2>
+        <p class="section-subtitle">Our new launches are here to vibe with every mood shift.</p>
+        <div id="new-launches-grid" class="product-grid">
+            <!-- Injected by JS -->
+        </div>
+    </section>
+
+    <!-- Introduction Text -->
+    <section style="text-align: center; padding: 4rem 2rem; background: #fff;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Say Hello To Case of Beauty</h2>
+        <p style="max-width: 800px; margin: 0 auto; color: #666;">
+            Effective, clean, and most importantly fuss-free, we've got a product for every mood your skin is in –
+            expect potency, expect results, expect an expertly crafted solution!
+        </p>
+        <p style="margin-top: 1rem; font-weight: 600;">So go ahead, define your Case of Beauty!</p>
+    </section>
+
+    <!-- Shop/Bestsellers -->
+    <section id="shop" class="container">
+        <h2 class="section-title">Bestsellers</h2>
+        <p class="section-subtitle">Explore our Bestsellers for tried-and-true favorites that our customers can't live
+            without.</p>
+
+        <div id="product-grid" class="product-grid">
+            <!-- Products will be injected here by JS -->
+        </div>
+    </section>
+
+    <!-- Community Voices (Videos) -->
+    <section id="insta-viral" class="community-voices container">
+        <h2 class="section-title">#The Case of Beauty Community</h2>
+        <div class="video-grid" id="video-container">
+            <!-- Videos injected by JS -->
+        </div>
+    </section>
+
+    <!-- Case of Beauty For A Cause -->
+    <section class="moody-cause container">
+        <div class="cause-card">
+            <div class="cause-text" id="about-us">
+                <h2>Case of Beauty For A Cause</h2>
+                <p>Self-care is the key to a happier state of being. Through Case of Beauty we aim to create a safe
+                    space to
+                    talk about everything related to self-care and mental health.</p>
+                <button class="cta-btn secondary">KNOW MORE</button>
+            </div>
+            <div class="cause-img">
+                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80"
+                    alt="Case of Beauty Cause">
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews container">
+        <h2 class="section-title">What Our Community Says</h2>
+        <div class="reviews-slider" id="reviews-container">
+            <!-- Reviews injected by JS -->
+        </div>
+    </section>
+
+    <!-- Floating Buttons -->
+    <div class="rewards-btn">
+        <i class="fas fa-crown"></i> Rewards
+    </div>
+
+    <div class="whatsapp-btn">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content" style="width: 350px;">
+            <div class="close-modal" onclick="toggleAuthModal()"><i class="fas fa-times"></i></div>
+            <h2 id="auth-title">Login</h2>
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+                <div class="form-group" id="name-group" style="display:none;">
+                    <label>Name</label>
+                    <input type="text" id="auth-name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="auth-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="auth-pass" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;">Continue</button>
+                <p style="margin-top: 1rem; text-align:center; font-size:0.9rem;">
+                    <span id="auth-switch-text">New here?</span>
+                    <a href="#" onclick="toggleAuthType()" style="color:#4A90E2;" id="auth-switch-link">Create
+                        account</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar Overlay -->
+    <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-sidebar-header">
+            <h3><i class="fas fa-shopping-bag"></i> Your Cart</h3>
+            <button class="cart-close-btn" onclick="closeCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items-scroll">
+            <div id="cart-items-list" class="cart-items-list"></div>
+        </div>
+        <div class="cart-sidebar-footer">
+            <div class="cart-total-row">
+                <span>Total</span>
+                <span id="cart-total" class="cart-total">₹0.00</span>
+            </div>
+            <button id="cart-checkout-btn" class="btn-checkout-main" onclick="goToCheckout()" disabled>
+                <i class="fas fa-lock"></i> Checkout
+            </button>
+            <button class="btn-continue-shopping" onclick="closeCart()">
+                <i class="fas fa-arrow-left"></i> Continue Shopping
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content" style="width: 400px; text-align: center;">
+            <div class="close-modal" onclick="toggleProfileModal()"><i class="fas fa-times"></i></div>
+            <div class="profile-header">
+                <img src="https://ui-avatars.com/api/?name=User&background=FFB7C5&color=fff" id="profile-avatar"
+                    class="profile-avatar-large">
+                <h2 id="profile-name">User Name</h2>
+                <p id="profile-email">email@example.com</p>
+                <div id="profile-role-badge" class="badge">User</div>
+            </div>
+            <div class="profile-links" style="margin-top:1.5rem; display:flex; flex-direction:column; gap:10px;">
+                <a href="my-orders.html" class="profile-nav-link"><i class="fas fa-box-open"></i> My Orders</a>
+            </div>
+            <div class="profile-actions" style="margin-top: 1rem;">
+                <button class="btn-primary" style="width:100%;" onclick="SessionManager.logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content video-modal-content">
+            <div class="close-modal" onclick="closeVideoPlayer()"><i class="fas fa-times"></i></div>
+            <div class="video-side-by-side">
+                <div class="video-player-container">
+                    <video id="main-video-player" controls autoplay></video>
+                </div>
+                <div class="video-product-info">
+                    <img id="modal-product-img" src="" alt="Product">
+                    <h3 id="modal-product-title">Product Title</h3>
+                    <p id="modal-product-desc"></p>
+                    <div class="modal-product-footer">
+                        <span id="modal-product-price">₹0</span>
+                        <button id="modal-buy-btn" class="reel-buy-btn">BUY NOW</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <p>Effective, clean, and fuss-free, we've got a product for every mood your skin is in. Our products are
+                    potent, result-driven and crafted by experts.</p>
+
+                <h4 id="contact-us">OFFICE ADDRESS</h4>
+                <div class="office-info">
+                    <strong>Mumbai Office:</strong>RAS BEAUTY PRIVATE LIMITED, 104, 105, 106 Creative Industrial Estate,
+                    1st Floor, N.M. Joshi Marg, Lower Parel, Mumbai, 400011
+                </div>
+                <div class="office-info">
+                    <strong>Raipur Office:</strong>RAS BEAUTY PRIVATE LIMITED, 14&15/7, Nandanvan Road, Chandanidih,
+                    Raipur, Chhattisgarh, India, 492099<br>
+                    CIN: U24297CT2021PTC011539
+                </div>
+
+                <div class="office-info" style="margin-top: 2rem;">
+                    Mail us at: <a href="mailto:care@caseofbeauty.com"
+                        style="color:#fff; text-decoration:underline;">care@caseofbeauty.com</a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h3>QUICK LINKS</h3>
+                <ul>
+                    <li><a href="#shop">Shop All</a></li>
+                    <li><a href="#shop">Bestsellers</a></li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('press')">Press & Media</a></li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('blog')">The Beauty Blog</a></li>
+                    <li><a href="#about-us">About Us</a></li>
+                    <li><a href="admin-login.html" style="color: #FFB7C5; font-weight: 600;">Admin Login</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h3>INFORMATIONS & POLICIES</h3>
+                <ul>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('returns')">Returns & Refunds Policy</a>
+                    </li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('terms')">Terms & Conditions</a></li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('privacy')">Privacy Policy</a></li>
+                    <li><a href="#contact-us">Contact us</a></li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('work')">Work with Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Case of Beauty India. All Rights Reserved.</p>
+            <a href="admin-login.html" class="admin-footer-link">Admin Dashboard</a>
+        </div>
+    </footer>
+
+    <!-- Info Modal (Policies, About, etc) -->
+    <div id="info-modal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="close-modal" onclick="closeInfoModal()"><i class="fas fa-times"></i></div>
+            <h2 id="info-title" style="margin-bottom: 1.5rem; color: #333;">Information</h2>
+            <div id="info-body"
+                style="line-height: 1.6; color: #666; max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                <!-- Content injected by JS -->
+            </div>
+            <div style="margin-top: 2rem; text-align: center;">
+                <button class="btn-primary" onclick="closeInfoModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="cart.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

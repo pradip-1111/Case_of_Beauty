@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Case of Beauty</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="checkout-page">
+
+    <!-- Top bar -->
+    <div class="checkout-topbar">
+        <a href="index.html" class="checkout-back-link"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+        <div class="checkout-logo"><img src="COB.jpeg" alt="Case of Beauty" style="height:48px;"></div>
+        <div style="width:140px;"></div>
+    </div>
+
+    <div class="checkout-container">
+
+        <!-- LEFT: Address + Steps -->
+        <div class="checkout-left">
+
+            <!-- Step Indicator -->
+            <div class="checkout-steps">
+                <div class="step active" id="step-indicator-1"><span>1</span> Delivery</div>
+                <div class="step-divider"></div>
+                <div class="step" id="step-indicator-2"><span>2</span> Review Order</div>
+            </div>
+
+            <!-- STEP 1: Address Selection -->
+            <div id="step-1" class="checkout-step">
+                <h2 class="checkout-section-title"><i class="fas fa-map-marker-alt"></i> Delivery Address</h2>
+
+                <!-- Saved Addresses -->
+                <div id="saved-addresses-container">
+                    <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading saved addresses...</p>
+                </div>
+
+                <!-- Add New Address Toggle -->
+                <button class="btn-add-address" id="toggle-address-form-btn" onclick="toggleAddressForm()">
+                    <i class="fas fa-plus-circle"></i> Add New Address
+                </button>
+
+                <!-- New Address Form (hidden by default) -->
+                <div id="new-address-form" class="address-form-card" style="display:none;">
+                    <h3>New Delivery Address</h3>
+                    <form id="address-form" onsubmit="saveAddress(event)">
+                        <div class="address-form-grid">
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="addr-name" placeholder="Enter full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number *</label>
+                                <input type="tel" id="addr-phone" placeholder="10-digit mobile number" required
+                                    pattern="[0-9]{10}">
+                            </div>
+                            <div class="form-group full">
+                                <label>Address Line *</label>
+                                <input type="text" id="addr-line" placeholder="House no, Street, Area, Landmark"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label>City *</label>
+                                <input type="text" id="addr-city" placeholder="City" required>
+                            </div>
+                            <div class="form-group">
+                                <label>State *</label>
+                                <input type="text" id="addr-state" placeholder="State" required>
+                            </div>
+                            <div class="form-group">
+                                <label>PIN Code *</label>
+                                <input type="text" id="addr-pin" placeholder="6-digit PIN" required pattern="[0-9]{6}">
+                            </div>
+                        </div>
+                        <div class="address-form-actions">
+                            <button type="button" class="btn-cancel-addr" onclick="toggleAddressForm()">Cancel</button>
+                            <button type="submit" class="btn-save-addr"><i class="fas fa-check"></i> Save & Use</button>
+                        </div>
+                    </form>
+                </div>
+
+                <button class="btn-continue-checkout" id="continue-to-review-btn" onclick="goToStep2()" disabled>
+                    Continue to Review <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- STEP 2: Review Order -->
+            <div id="step-2" class="checkout-step" style="display:none;">
+                <h2 class="checkout-section-title"><i class="fas fa-receipt"></i> Review Your Order</h2>
+                <div class="selected-address-summary" id="selected-address-summary"></div>
+                <div class="review-items" id="review-items-list"></div>
+                <button class="btn-place-order" id="place-order-btn" onclick="placeOrder()">
+                    <i class="fas fa-lock"></i> Place Order Securely
+                </button>
+            </div>
+
+        </div>
+
+        <!-- RIGHT: Order Summary -->
+        <aside class="checkout-right">
+            <div class="order-summary-card">
+                <h3><i class="fas fa-shopping-bag"></i> Order Summary</h3>
+                <div id="order-summary-items"></div>
+                <div class="order-summary-divider"></div>
+                <div class="order-summary-row">
+                    <span>Subtotal</span>
+                    <span id="summary-subtotal">₹0.00</span>
+                </div>
+                <div class="order-summary-row">
+                    <span>Shipping</span>
+                    <span class="free-shipping">FREE</span>
+                </div>
+                <div class="order-summary-divider"></div>
+                <div class="order-summary-row total-row">
+                    <span>Total</span>
+                    <span id="summary-total">₹0.00</span>
+                </div>
+                <div class="secure-badges">
+                    <span><i class="fas fa-shield-alt"></i> Secure Checkout</span>
+                    <span><i class="fas fa-undo"></i> Easy Returns</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div id="order-success-modal" class="modal" style="display:none;">
+        <div class="modal-content" style="width:420px; text-align:center; padding:3rem 2rem;">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Order Placed! 🎉</h2>
+            <p>Your order has been placed successfully. We'll send you updates as it gets processed.</p>
+            <div id="success-order-id" style="font-family:monospace; color:#6366f1; margin:1rem 0; font-size:0.9rem;">
+            </div>
+            <div class="success-actions">
+                <a href="my-orders.html" class="btn-primary"
+                    style="text-decoration:none; display:inline-block; margin-right:10px;">
+                    <i class="fas fa-box"></i> View My Orders
+                </a>
+                <a href="index.html" class="btn-outline-action" style="text-decoration:none; display:inline-block;">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts — data.js must load first (it defines API_URL, SessionManager, etc.) -->
+    <script src="data.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        // NOTE: API_URL is already defined in data.js — do NOT redefine it here.
+        const LS_ADDR_KEY = 'cob_addresses';
+        let selectedAddressId = null;
+        let savedAddresses = [];
+
+        // ─── Init ───────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!SessionManager.isLoggedIn()) {
+                alert('Please login to checkout.');
+                window.location.href = 'index.html';
+                return;
+            }
+            if (CartManager.getCount() === 0) {
+                alert('Your cart is empty!');
+                window.location.href = 'index.html';
+                return;
+            }
+            renderOrderSummary();
+            await loadSavedAddresses();
+        });
+
+        // ─── Order Summary ──────────────────────────────────────
+        function renderOrderSummary() {
+            const items = CartManager.getItems();
+            const total = CartManager.getTotal();
+            document.getElementById('order-summary-items').innerHTML = items.map(i => `
+                <div class="summary-item">
+                    <img src="${i.image}" alt="${i.name}" class="summary-item-img">
+                    <div class="summary-item-info">
+                        <div class="summary-item-name">${i.name}</div>
+                        <div class="summary-item-qty">Qty: ${i.qty}</div>
+                    </div>
+                    <div class="summary-item-price">₹${(i.price * i.qty).toFixed(2)}</div>
+                </div>
+            `).join('');
+            document.getElementById('summary-subtotal').textContent = `₹${total.toFixed(2)}`;
+            document.getElementById('summary-total').textContent = `₹${total.toFixed(2)}`;
+        }
+
+        // ─── Address local storage helpers ──────────────────────
+        function getLocalAddresses() {
+            try { return JSON.parse(localStorage.getItem(LS_ADDR_KEY)) || []; }
+            catch { return []; }
+        }
+        function saveLocalAddresses(arr) {
+            localStorage.setItem(LS_ADDR_KEY, JSON.stringify(arr));
+        }
+
+        // ─── Load Addresses (server first, fallback to localStorage) ──
+        async function loadSavedAddresses() {
+            try {
+                const res = await fetch(API_URL + '/addresses', {
+                    headers: { 'x-auth-token': SessionManager.getToken() }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length >= 0) {
+                        savedAddresses = data;
+                        // Merge locally saved addresses that aren't on server yet
+                        getLocalAddresses().forEach(la => {
+                            if (!savedAddresses.find(a => a.id === la.id)) savedAddresses.push(la);
+                        });
+                    } else {
+                        savedAddresses = getLocalAddresses();
+                    }
+                } else {
+                    savedAddresses = getLocalAddresses();
+                }
+            } catch (_) {
+                savedAddresses = getLocalAddresses();
+            }
+            renderAddressCards();
+        }
+
+        // ─── Render Address Cards ────────────────────────────────
+        function renderAddressCards() {
+            const container = document.getElementById('saved-addresses-container');
+            const continueBtn = document.getElementById('continue-to-review-btn');
+
+            if (!savedAddresses || savedAddresses.length === 0) {
+                container.innerHTML = `<p class="no-addresses-hint"><i class="fas fa-info-circle"></i>&nbsp; No saved addresses yet. Click <strong>Add New Address</strong> below to get started.</p>`;
+                continueBtn.disabled = true;
+                return;
+            }
+
+            container.innerHTML = savedAddresses.map(addr => `
+                <label class="address-radio-card ${selectedAddressId === addr.id ? 'selected' : ''}" for="addr-${addr.id}">
+                    <input type="radio" name="selectedAddress" id="addr-${addr.id}" value="${addr.id}"
+                        ${selectedAddressId === addr.id ? 'checked' : ''}
+                        onchange="selectAddress('${addr.id}')">
+                    <div class="address-card-body">
+                        <div class="address-card-name">${addr.full_name} <span class="addr-phone">${addr.phone}</span></div>
+                        <div class="address-card-text">${addr.address_line}, ${addr.city}, ${addr.state} - ${addr.pincode}</div>
+                    </div>
+                    <button type="button" class="addr-delete-btn" onclick="deleteAddress('${addr.id}', event)" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </label>
+            `).join('');
+
+            // Auto-select first if nothing is selected
+            if (!selectedAddressId && savedAddresses.length > 0) {
+                selectAddress(savedAddresses[0].id);
+                const radio = document.getElementById('addr-' + savedAddresses[0].id);
+                if (radio) radio.checked = true;
+            }
+        }
+
+        function selectAddress(id) {
+            selectedAddressId = id;
+            document.querySelectorAll('.address-radio-card').forEach(c => c.classList.remove('selected'));
+            const lbl = document.querySelector('label[for="addr-' + id + '"]');
+            if (lbl) lbl.classList.add('selected');
+            document.getElementById('continue-to-review-btn').disabled = false;
+        }
+
+        async function deleteAddress(id, e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!confirm('Remove this address?')) return;
+            try {
+                await fetch(API_URL + '/addresses/' + id, {
+                    method: 'DELETE',
+                    headers: { 'x-auth-token': SessionManager.getToken() }
+                });
+            } catch (_) { }
+            saveLocalAddresses(getLocalAddresses().filter(a => a.id !== id));
+            if (selectedAddressId === id) selectedAddressId = null;
+            savedAddresses = savedAddresses.filter(a => a.id !== id);
+            renderAddressCards();
+        }
+
+        // ─── Address Form ────────────────────────────────────────
+        function toggleAddressForm() {
+            const form = document.getElementById('new-address-form');
+            const btn = document.getElementById('toggle-address-form-btn');
+            const isOpen = form.style.display !== 'none';
+            form.style.display = isOpen ? 'none' : 'block';
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-plus-circle"></i> Add New Address'
+                : '<i class="fas fa-times"></i> Cancel';
+        }
+
+        async function saveAddress(e) {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            const payload = {
+                full_name: document.getElementById('addr-name').value.trim(),
+                phone: document.getElementById('addr-phone').value.trim(),
+                address_line: document.getElementById('addr-line').value.trim(),
+                city: document.getElementById('addr-city').value.trim(),
+                state: document.getElementById('addr-state').value.trim(),
+                pincode: document.getElementById('addr-pin').value.trim()
+            };
+
+            let newAddr = null;
+            try {
+                const res = await fetch(API_URL + '/addresses', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-auth-token': SessionManager.getToken() },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) newAddr = await res.json();
+            } catch (_) { }
+
+            // Fallback: store locally if server failed or table doesn't exist
+            if (!newAddr || !newAddr.id) {
+                newAddr = { ...payload, id: 'local_' + Date.now() };
+                const local = getLocalAddresses();
+                local.push(newAddr);
+                saveLocalAddresses(local);
+            }
+
+            savedAddresses.push(newAddr);
+            selectedAddressId = newAddr.id;
+            renderAddressCards();
+            toggleAddressForm();
+            document.getElementById('address-form').reset();
+            document.getElementById('continue-to-review-btn').disabled = false;
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Save & Use';
+        }
+
+        // ─── Step Navigation ────────────────────────────────────
+        function goToStep2() {
+            if (!selectedAddressId) { alert('Please select a delivery address.'); return; }
+            const addr = savedAddresses.find(a => a.id === selectedAddressId);
+            if (!addr) { alert('Address not found. Please re-select.'); return; }
+
+            const items = CartManager.getItems();
+            document.getElementById('review-items-list').innerHTML = items.map(i => `
+                <div class="review-item">
+                    <img src="${i.image}" alt="${i.name}" class="review-item-img">
+                    <div class="review-item-info">
+                        <div class="review-item-name">${i.name}</div>
+                        <div class="review-item-qty">Qty: ${i.qty} × ₹${i.price.toFixed(2)}</div>
+                    </div>
+                    <div class="review-item-total">₹${(i.price * i.qty).toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('selected-address-summary').innerHTML = `
+                <div class="addr-summary-inner">
+                    <i class="fas fa-map-marker-alt addr-summary-icon"></i>
+                    <div>
+                        <strong>${addr.full_name}</strong> · ${addr.phone}<br>
+                        <span>${addr.address_line}, ${addr.city}, ${addr.state} - ${addr.pincode}</span>
+                    </div>
+                    <button class="change-addr-btn" onclick="backToStep1()"><i class="fas fa-edit"></i> Change</button>
+                </div>
+            `;
+
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+            document.getElementById('step-indicator-1').classList.remove('active');
+            document.getElementById('step-indicator-2').classList.add('active');
+        }
+
+        function backToStep1() {
+            document.getElementById('step-2').style.display = 'none';
+            document.getElementById('step-1').style.display = 'block';
+            document.getElementById('step-indicator-2').classList.remove('active');
+            document.getElementById('step-indicator-1').classList.add('active');
+        }
+
+        // ─── Place Order ────────────────────────────────────────
+        async function placeOrder() {
+            if (!selectedAddressId) { alert('No address selected.'); return; }
+            const addr = savedAddresses.find(a => a.id === selectedAddressId);
+            if (!addr) { alert('Address not found.'); return; }
+
+            const items = CartManager.getItems();
+            if (items.length === 0) { alert('Your cart is empty.'); return; }
+
+            const btn = document.getElementById('place-order-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Placing Order...';
+
+            // Prepare batch order payload
+            const orderPayload = items.map(item => ({
+                productId: item.id,
+                productName: item.name,
+                productImage: item.image,
+                price: item.price * item.qty,
+                quantity: item.qty,
+                customerEmail: localStorage.getItem('cob_user_email') || SessionManager.getEmail?.() || 'N/A',
+                shipping_name: addr.full_name,
+                shipping_phone: addr.phone,
+                shipping_address: addr.address_line,
+                shipping_city: addr.city,
+                shipping_state: addr.state,
+                shipping_pincode: addr.pincode
+            }));
+
+            try {
+                const res = await fetch(API_URL + '/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth-token': SessionManager.getToken()
+                    },
+                    body: JSON.stringify(orderPayload)
+                });
+
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.details || errData.error || 'Failed to place order');
+                }
+
+                const results = await res.json();
+
+                if (Array.isArray(results) && results.length > 0) {
+                    CartManager.clear();
+                    const first = results[0];
+                    document.getElementById('success-order-id').textContent =
+                        first && first.id ? 'Order ID: #' + (first.id.toString()).slice(-8).toUpperCase() : '';
+                    document.getElementById('order-success-modal').style.display = 'flex';
+                }
+            } catch (err) {
+                console.error('Order placement failed:', err);
+                alert('Failed to place order: ' + err.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Place Order Securely';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

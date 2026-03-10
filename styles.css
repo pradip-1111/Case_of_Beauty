@@ -269,10 +269,10 @@ ul {
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     position: relative;
-    padding: 1rem 2rem;
+    padding: 0.5rem 1.5rem;
 }
 
 .logo-container {
@@ -282,11 +282,9 @@ ul {
 }
 
 .header-icons {
-    position: absolute;
-    right: 2rem;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.2rem;
     font-size: 1.2rem;
     cursor: pointer;
 }
@@ -307,6 +305,260 @@ ul {
     padding: 0.8rem 0;
     display: flex;
     justify-content: center;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #111;
+}
+
+@media (max-width: 1024px) {
+    .nav-menu {
+        gap: 1.2rem;
+    }
+
+    .nav-link {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .header-nav {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        height: 100vh;
+        background: #fff;
+        z-index: 2000;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 5rem 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+        border-top: none;
+    }
+
+    .header-nav.active {
+        display: flex;
+        left: 0;
+        z-index: 2001;
+        /* Ensure it's above everything */
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .nav-link {
+        font-size: 1.1rem;
+        width: 100%;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .header-top {
+        padding: 1rem 1.5rem;
+    }
+
+    .logo-text {
+        font-size: 1.1rem !important;
+        /* Reduced to prevent overlap */
+        white-space: nowrap;
+    }
+
+    .header-icons {
+        gap: 0.6rem;
+        /* Reduced gap */
+        font-size: 1rem;
+    }
+
+    /* Hide admin text on very small screens */
+    #admin-link {
+        font-size: 0;
+        padding: 5px !important;
+    }
+
+    #admin-link::before {
+        content: "\f3ed";
+        /* FontAwesome shield/lock icon */
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 0.9rem;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+        z-index: 2100;
+        /* Above everything */
+    }
+
+    .nav-menu {
+        display: flex !important;
+        /* Force display */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    /* Mega menu adjustments for mobile */
+    .mega-menu {
+        position: static;
+        box-shadow: none;
+        padding: 1rem 0;
+        border: none;
+    }
+
+    .mega-menu-container {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+
+    /* Container adjustments */
+    .container {
+        padding: 0 1rem;
+    }
+
+    /* Hero Responsive */
+    .hero {
+        padding: 4rem 1.5rem;
+        min-height: auto;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    /* Banner Slider Responsive */
+    .banner-slide {
+        height: 60vh;
+    }
+
+    .banner-content {
+        padding: 1.5rem;
+        left: 5%;
+        width: 90%;
+    }
+
+    .banner-title {
+        font-size: 1.8rem;
+    }
+
+    /* Product Grid Responsive */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+    }
+
+    .product-card {
+        margin-bottom: 1rem;
+    }
+
+    .product-info {
+        padding: 0.8rem;
+    }
+
+    .product-name {
+        font-size: 0.85rem;
+    }
+
+    .price-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    /* Category Grid Responsive */
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem;
+    }
+
+    .category-card h3 {
+        font-size: 0.9rem;
+    }
+
+    /* Flash Sale Responsive */
+    .sale-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .countdown {
+        gap: 0.5rem;
+    }
+
+    .countdown span {
+        font-size: 1.8rem;
+    }
+
+    /* Video Grid Responsive */
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+    }
+
+    /* Footer Responsive */
+    .footer-container {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        text-align: center;
+    }
+
+    .footer-column h4 {
+        margin: 1.5rem 0 0.5rem;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    /* General Polish */
+    section {
+        padding: 2.5rem 1rem !important;
+    }
+
+    .section-title {
+        font-size: 1.8rem !important;
+        margin: 2rem 0 0.5rem !important;
+    }
+
+    /* Modal Mobile Adjustments */
+    .modal-content {
+        padding: 1.5rem;
+        width: 95% !important;
+    }
+
+    .video-side-by-side {
+        flex-direction: column !important;
+        height: auto !important;
+    }
+
+    .video-player-container {
+        height: 60vh;
+    }
+
+    .video-product-info {
+        padding: 1.5rem;
+    }
 }
 
 .nav-menu {
@@ -331,29 +583,7 @@ ul {
     color: var(--primary-color);
 }
 
-/* Removed duplicate grid assignment */
-
-/* Mobile Navigation */
-@media (max-width: 768px) {
-    .header-nav {
-        display: none;
-    }
-
-    .header-icons {
-        right: 1rem;
-    }
-
-    .logo-text {
-        font-size: 2.2rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-menu {
-        display: none;
-        /* Hide nav links on mobile; ideally implement a drawer */
-    }
-}
+/* Combined previous redundant media queries into the main block above */
 
 /* Hero Section */
 .hero {

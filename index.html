@@ -56,24 +56,15 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
-        Buy Any 3 At ₹999
+        ✨ BUY 2 GET 2 + 2 FREE GIFTS ✨
     </div>
 
     <!-- Header -->
     <header class="main-header">
-        <div class="header-container">
-            <div class="logo">
-                <img src="logo.jpg" alt="Case of Beauty" style="height: 60px; vertical-align: middle;">
+        <div class="header-top">
+            <div class="logo-container">
+                <a href="index.html" class="logo-text">Case of Beauty</a>
             </div>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="#shop" class="nav-link">Shop All</a></li>
-                    <li><a href="#insta-viral" class="nav-link">#InstaViral 🔥</a></li>
-                    <li><a href="#categories" class="nav-link">Shop By ⌵</a></li>
-                    <li><a href="#new-launches" class="nav-link" style="color: #4A90E2;">Hello Kitty (New)</a></li>
-                    <li><a href="#shop" class="nav-link" onclick="filterByCategory('Sunscreens')">Sunscreens</a></li>
-                </ul>
-            </nav>
             <div class="header-icons">
                 <i class="fas fa-search"></i>
                 <div class="user-dropdown">
@@ -89,6 +80,112 @@
                     style="display:none; background: #FFB7C5; border:none; border-radius:4px; padding: 5px 10px; cursor:pointer; font-weight:600;">Admin</button>
             </div>
         </div>
+        <nav class="header-nav">
+            <ul class="nav-menu">
+                <li><a href="#shop" class="nav-link">Shop All</a></li>
+                <li><a href="#insta-viral" class="nav-link">#InstaViral 🔥</a></li>
+                <li class="has-mega-menu">
+                    <a href="javascript:void(0)" class="nav-link" onclick="toggleMegaMenu()">Shop By ⌵</a>
+                    <div id="mega-menu" class="mega-menu">
+                        <div class="mega-menu-container">
+                            <div class="mega-column">
+                                <img src="assets/mega-menu/category.png" alt="Category">
+                                <h3>Shop by Category</h3>
+                                <ul class="mega-links">
+                                    <li><a href="#shop" onclick="filterByCategory('All Categories')">All Categories</a>
+                                    </li>
+                                    <li><a href="#shop" onclick="filterByCategory('Sunscreens')">Sunscreens</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Face Serums')">Face Serums</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Moisturisers')">Moisturisers</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Face Cleansers')">Face Cleansers</a>
+                                    </li>
+                                    <li><a href="#shop" onclick="filterByCategory('Eye Care')">Eye Care</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Face Mask')">Face Mask</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Face Mists & Toners')">Face Mists &
+                                            Toners</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Body Lotion')">Body Lotion</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Body Wash')">Body Wash</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Body Mist')">Body Mist</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Hair Care')">Hair Care</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Lip Care')">Lip Care</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Perfumes')">Perfumes</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Makeup')">Makeup</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-column">
+                                <img src="assets/mega-menu/range.png" alt="Range">
+                                <h3>Shop by Range</h3>
+                                <ul class="mega-links">
+                                    <li><a href="#shop" onclick="filterByCategory('All Ranges')">All Ranges</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('7D HydroBurst Range')">7D HydroBurst
+                                            Range</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Vibran C Range')">Vibran C Range</a>
+                                    </li>
+                                    <li><a href="#shop" onclick="filterByCategory('AcneXpert Range')">AcneXpert
+                                            Range</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('DermaSoothe Range')">DermaSoothe
+                                            Range</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Perfumes')">Perfumes</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Hello Kitty')">Hello Kitty</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-column">
+                                <img src="assets/mega-menu/concern.png" alt="Concern">
+                                <h3>Shop by Concern</h3>
+                                <ul class="mega-links">
+                                    <li><a href="#shop" onclick="filterByCategory('Dryness')">Dryness</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Dullness & Pigmentation')">Dullness &
+                                            Pigmentation</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Winkles & Fine Lines')">Winkles &
+                                            Fine Lines</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Damaged Skin Barrier')">Damaged Skin
+                                            Barrier</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Active Acne')">Active Acne</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Oil Control, Pores')">Oil Control,
+                                            Pores</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Ingrown Hair')">Ingrown Hair</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Dark Spots & Tanning')">Dark Spots &
+                                            Tanning</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-column">
+                                <img src="assets/mega-menu/skin-type.png" alt="Skin Type">
+                                <h3>Shop by Skin Type</h3>
+                                <ul class="mega-links">
+                                    <li><a href="#shop" onclick="filterByCategory('Normal to Combination')">Normal to
+                                            Combination</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Dry')">Dry</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Oily & Acne Prone')">Oily & Acne
+                                            Prone</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Sensitive')">Sensitive</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-column">
+                                <img src="assets/mega-menu/ingredient.png" alt="Ingredient">
+                                <h3>Shop by Ingredient</h3>
+                                <ul class="mega-links">
+                                    <li><a href="#shop" onclick="filterByCategory('Hyaluronic')">Hyaluronic</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Peptide')">Peptide</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Niacinamide')">Niacinamide</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Vitamin C')">Vitamin C</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Ceramides')">Ceramides</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Vitamin E')">Vitamin E</a></li>
+                                    <li><a href="#shop" onclick="filterByCategory('Salicylic Acid')">Salicylic Acid</a>
+                                    </li>
+                                    <li><a href="#shop" onclick="filterByCategory('Keratin')">Keratin</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="#new-launches" class="nav-link" style="color: #4A90E2;">Hello Kitty (New)</a></li>
+                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Sunscreens')">Sunscreens</a></li>
+                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Moisturizers')">Moisturizers</a></li>
+                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Perfumes')">Perfumes</a></li>
+                <li><a href="#new-launches" class="nav-link">What's New ?</a></li>
+                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Combos')">Gifts & Combos</a></li>
+            </ul>
+        </nav>
     </header>
 
     <!-- Hero Banner Slider -->
@@ -341,13 +438,16 @@
 
                 <h4 id="contact-us">OFFICE ADDRESS</h4>
                 <div class="office-info">
-                    <strong>Mumbai Office:</strong>RAS BEAUTY PRIVATE LIMITED, 104, 105, 106 Creative Industrial Estate,
-                    1st Floor, N.M. Joshi Marg, Lower Parel, Mumbai, 400011
+                    <strong>Kathmandu Office:</strong> Kathmandu Metropolitan City, Kathmandu 44600, Bagmati Province,
+                    Nepal
                 </div>
                 <div class="office-info">
-                    <strong>Raipur Office:</strong>RAS BEAUTY PRIVATE LIMITED, 14&15/7, Nandanvan Road, Chandanidih,
-                    Raipur, Chhattisgarh, India, 492099<br>
-                    CIN: U24297CT2021PTC011539
+                    <strong>Birgunj Office:</strong> Birgunj Metropolitan City, Parsa 44300, Madhesh Province, Nepal
+                </div>
+
+                <div class="office-info" style="margin-top: 1.5rem;">
+                    <strong>Contact:</strong> <a href="tel:+9779802594674"
+                        style="color:#fff; text-decoration:none;">+977 9802594674</a>
                 </div>
 
                 <div class="office-info" style="margin-top: 2rem;">
@@ -405,6 +505,21 @@
     <script src="data.js"></script>
     <script src="cart.js"></script>
     <script src="script.js"></script>
+    <script>
+        function toggleMegaMenu() {
+            const menu = document.getElementById('mega-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close mega menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('mega-menu');
+            const shopByLink = document.querySelector('.has-mega-menu > a');
+            if (menu && !menu.contains(e.target) && e.target !== shopByLink) {
+                menu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 
 </html>

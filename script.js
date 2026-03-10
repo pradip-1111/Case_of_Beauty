@@ -82,24 +82,44 @@ window.filterByCategory = async function (categoryTitle) {
     if (!grid || !products) return;
 
     // Scroll to shop section
-    document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+    const shopSection = document.getElementById('shop');
+    if (shopSection) {
+        shopSection.scrollIntoView({ behavior: 'smooth' });
+    }
 
     // Filter products
-    const filtered = products.filter(p =>
-        (p.category && p.category.toLowerCase() === categoryTitle.toLowerCase()) ||
-        (p.tag && p.tag.toLowerCase() === categoryTitle.toLowerCase()) ||
-        (p.description && p.description.toLowerCase().includes(categoryTitle.toLowerCase())) ||
-        (p.name && p.name.toLowerCase().includes(categoryTitle.toLowerCase()))
-    );
+    let filtered;
+    if (categoryTitle === 'All Categories' || categoryTitle === 'All Ranges' || categoryTitle === 'Shop All') {
+        filtered = products;
+    } else {
+        const query = categoryTitle.toLowerCase();
+        filtered = products.filter(p =>
+            (p.category && p.category.toLowerCase().includes(query)) ||
+            (p.tag && p.tag.toLowerCase().includes(query)) ||
+            (p.name && p.name.toLowerCase().includes(query)) ||
+            (p.description && p.description.toLowerCase().includes(query))
+        );
+    }
+
+    // Update section title if it's the main shop grid
+    const sectionTitle = shopSection ? shopSection.querySelector('.section-title') : null;
+    if (sectionTitle) {
+        sectionTitle.innerText = categoryTitle === 'All Categories' || categoryTitle === 'Shop All' ? 'Bestsellers' : categoryTitle;
+    }
 
     if (filtered.length === 0) {
-        grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; padding: 4rem; color: #999;">No products found in "${categoryTitle}". Showing all products instead.</p>`;
+        grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; padding: 4rem; color: #999;">No products found for "${categoryTitle}". Showing everything instead.</p>`;
         setTimeout(() => {
             grid.innerHTML = products.map(p => createProductCard(p)).join('');
+            if (sectionTitle) sectionTitle.innerText = 'Bestsellers';
         }, 3000);
     } else {
         grid.innerHTML = filtered.map(p => createProductCard(p)).join('');
     }
+
+    // Close mega menu if open
+    const menu = document.getElementById('mega-menu');
+    if (menu) menu.classList.remove('active');
 };
 
 async function loadTopBar() {

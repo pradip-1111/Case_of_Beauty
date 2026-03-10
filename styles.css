@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 html {
     scroll-behavior: smooth;
@@ -144,71 +144,207 @@ ul {
     align-items: center;
 }
 
+.has-mega-menu {
+    position: static;
+}
+
+.mega-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    padding: 3rem 0;
+    border-top: 1px solid #f0f0f0;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar for Mega Menu */
+.mega-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.mega-menu::-webkit-scrollbar-track {
+    background: #f9f9f9;
+}
+
+.mega-menu::-webkit-scrollbar-thumb {
+    background: #FFB7C5;
+    /* Brand pink */
+    border-radius: 10px;
+}
+
+.mega-menu::-webkit-scrollbar-thumb:hover {
+    background: #e69a9a;
+}
+
+.mega-menu.active {
+    display: block;
+    animation: fadeInDown 0.3s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mega-menu-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    padding: 0 2rem;
+}
+
+.mega-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mega-column img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    /* Slightly portrait for premium feel */
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0.5rem;
+}
+
+.mega-column h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.mega-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.mega-links a {
+    font-size: 0.9rem;
+    color: #555;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    display: block;
+}
+
+.mega-links a:hover {
+    color: #FFB7C5;
+    /* Brand pink */
+    transform: translateX(5px);
+}
+
 .main-header {
     background-color: var(--white);
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
     position: sticky;
     top: 0;
     z-index: 1000;
+    padding: 0.5rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.header-container {
-    max-width: 1200px;
+.header-top {
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 1rem 2rem;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-.logo {
-    font-size: 2rem;
-    font-weight: 700;
+.header-icons {
+    position: absolute;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 800;
     letter-spacing: -1px;
-    color: #333;
+    color: #000;
+    text-transform: lowercase;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.header-nav {
+    border-top: 1px solid #f0f0f0;
+    padding: 0.8rem 0;
+    display: flex;
+    justify-content: center;
 }
 
 .nav-menu {
     display: flex;
     gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .nav-link {
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.85rem;
+    font-weight: 600;
     text-transform: uppercase;
-    transition: color 0.3s;
+    color: #111;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .nav-link:hover {
-    color: var(--accent-color);
+    color: var(--primary-color);
 }
 
-.header-icons {
-    display: flex;
-    gap: 1.5rem;
-    font-size: 1.2rem;
-    cursor: pointer;
-    flex-shrink: 0;
-}
+/* Removed duplicate grid assignment */
 
-@media (max-width: 1200px) {
-    .nav-menu {
-        gap: 1rem;
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    .header-nav {
+        display: none;
     }
 
-    .header-container {
-        padding: 0 1rem;
-    }
-}
-
-@media (max-width: 992px) {
-    .nav-menu {
-        gap: 0.5rem;
+    .header-icons {
+        right: 1rem;
     }
 
-    .nav-link {
-        font-size: 0.8rem;
+    .logo-text {
+        font-size: 2.2rem;
     }
 }
 

@@ -2358,6 +2358,74 @@ tbody tr:hover td {
     height: 80vh;
 }
 
+@media (max-width: 768px) {
+    .video-modal-content {
+        width: 88vw !important;
+        max-width: 380px !important;
+        max-height: 85vh !important;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .video-side-by-side {
+        flex-direction: column !important;
+        height: auto !important;
+    }
+
+    .video-player-container {
+        width: 100% !important;
+        height: auto !important;
+        flex: none !important;
+        aspect-ratio: 16 / 9 !important;
+        background: #000;
+        overflow: hidden;
+    }
+
+    #main-video-player {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: none !important;
+        object-fit: contain;
+    }
+
+    .video-product-info {
+        padding: 0.8rem 1rem !important;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .video-product-info img {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 8px;
+        object-fit: cover;
+        align-self: flex-start;
+    }
+
+    .video-product-info h3 {
+        font-size: 0.9rem !important;
+        margin: 0;
+    }
+
+    .video-product-info p {
+        font-size: 0.78rem !important;
+        color: #666;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .modal-product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 6px;
+    }
+}
+
 .video-player-container {
     flex: 1.2;
     background: #000;

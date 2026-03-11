@@ -1630,12 +1630,15 @@ tbody tr:hover td {
 }
 
 .reel-card {
-    min-width: 220px;
+    min-width: 250px;
+    max-width: 280px;
+    width: 250px;
     background: #fff;
-    border-radius: 24px;
+    border-radius: var(--border-radius, 16px);
     overflow: hidden;
-    transition: transform 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s;
     flex-shrink: 0;
+    border: 1px solid #eee;
 }
 
 .reel-card:hover {
@@ -1645,10 +1648,10 @@ tbody tr:hover td {
 .reel-video-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 9/16;
-    background: #000;
+    aspect-ratio: 1 / 1;
+    background: #f0f0f0;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 0;
     overflow: hidden;
 }
 
@@ -1666,12 +1669,11 @@ tbody tr:hover td {
 
 .reel-product-overlay {
     position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90px;
-    height: 90px;
-    border-radius: 12px;
+    bottom: 12px;
+    right: 12px;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
     border: 2px solid #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     object-fit: cover;
@@ -1680,7 +1682,8 @@ tbody tr:hover td {
 }
 
 .reel-info {
-    padding: 15px 5px;
+    padding: 1.5rem;
+    text-align: center;
 }
 
 .reel-title {

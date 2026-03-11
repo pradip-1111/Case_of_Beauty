@@ -370,22 +370,45 @@ ul {
         border-bottom: 1px solid #f5f5f5;
     }
 
+    /* Responsive Header Consolidation */
     .header-top {
-        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        gap: 0.5rem;
     }
 
-    .logo-text {
-        font-size: 1.4rem !important;
-        white-space: nowrap;
+    .logo-container {
+        order: 2;
+        flex: 1;
+        justify-content: center;
+        display: flex;
+    }
+
+    .mobile-menu-toggle {
+        display: block !important;
+        order: 1;
+        font-size: 1.3rem;
+        z-index: 2100;
     }
 
     .header-icons {
-        gap: 0.8rem;
-        /* Better gap for touch */
-        font-size: 1.1rem;
+        order: 3;
+        gap: 0.6rem;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
     }
 
-    /* Hide admin text on very small screens */
+    .logo-text {
+        font-size: 1.2rem !important;
+        letter-spacing: 0;
+        white-space: nowrap;
+    }
+
+    /* Hide admin text on very small screens or use icon only */
     #admin-link {
         font-size: 0;
         padding: 5px 8px !important;
@@ -396,16 +419,9 @@ ul {
 
     #admin-link::before {
         content: "\f3ed";
-        /* FontAwesome shield/lock icon */
         font-family: "Font Awesome 6 Free";
         font-weight: 900;
         font-size: 0.9rem;
-    }
-
-    .mobile-menu-toggle {
-        display: block;
-        z-index: 2100;
-        /* Above everything */
     }
 
     .nav-menu {
@@ -1114,25 +1130,37 @@ ul {
 
 @media (max-width: 600px) {
     .stats-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
     }
 
     .header-right .btn-workspace-visit span {
         display: none;
     }
 
+    .header-right .btn-workspace-visit {
+        padding: 8px;
+        min-width: 40px;
+        justify-content: center;
+    }
+
     .search-bar {
-        display: none;
-        /* Hide search on mobile header to save space */
+        display: none !important;
     }
 
     .workspace-header {
         justify-content: space-between;
+        padding: 0.8rem 1rem;
+        gap: 0.5rem;
     }
 
     .header-left-mobile {
         display: block !important;
-        margin-right: 1rem;
+        margin-right: 0.5rem;
+    }
+
+    .admin-badge {
+        display: none;
+        /* Hide 'Admin' pill on tiny screens */
     }
 }
 
@@ -2405,6 +2433,13 @@ tbody tr:hover td {
     transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@media (max-width: 480px) {
+    .cart-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+}
+
 .cart-sidebar.open {
     right: 0;
 }
@@ -2703,6 +2738,23 @@ tbody tr:hover td {
     align-items: start;
 }
 
+@media (max-width: 1024px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 1rem auto;
+    }
+
+    .checkout-right {
+        position: static;
+        order: 2;
+    }
+
+    .checkout-left {
+        order: 1;
+    }
+}
+
 .checkout-left {
     display: flex;
     flex-direction: column;
@@ -2717,6 +2769,19 @@ tbody tr:hover td {
     border-radius: 16px;
     padding: 1rem 2rem;
     border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 600px) {
+    .checkout-steps {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+
+    .step-divider {
+        display: none;
+    }
 }
 
 .step {
@@ -3013,6 +3078,41 @@ tbody tr:hover td {
 .btn-continue-checkout:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .checkout-topbar {
+        padding: 1rem;
+        justify-content: space-between;
+    }
+
+    .checkout-logo img {
+        height: 32px !important;
+    }
+
+    .checkout-topbar>div:last-child {
+        display: none;
+        /* Hide the spacer div */
+    }
+
+    .checkout-step {
+        padding: 1.5rem 1rem;
+    }
+
+    .address-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .address-radio-card {
+        padding: 14px;
+        font-size: 0.95rem;
+    }
+
+    .btn-add-address {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
 }
 
 /* Address Summary Bar */
@@ -3440,6 +3540,24 @@ tbody tr:hover td {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .order-card-body {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1.2rem;
+    }
+
+    .order-card-header {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+
+    .order-product-img {
+        width: 60px;
+        height: 60px;
+    }
 }
 
 .order-product-section {

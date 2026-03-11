@@ -384,7 +384,7 @@ async function openModal(type, id = null) {
             <div class="form-group full"><label>Product Description (Below Video)</label><input type="text" name="description" value="${item ? item.description : ''}" required></div>
             <div class="form-group"><label>Price (₹)</label><input type="number" name="price" value="${item ? item.price : ''}" required></div>
             ${buildUploadField('Product Image (Overlay)', 'product_image', item ? item.product_image : '', 'image/*')}
-            ${buildUploadField('Video File', 'videourl', item ? (item.videourl || item.video_url || item.videoUrl) : '', 'video/*')}
+            ${buildUploadField('Video File', 'video_url', item ? (item.video_url || item.videourl || item.videoUrl) : '', 'video/*')}
         `;
     } else if (type === 'SETTINGS') {
         fieldsHtml = `
@@ -427,8 +427,8 @@ function setupAdminModal() {
                 await DataManager.updateItem(DB_KEYS[type], item);
             } else {
                 const result = await DataManager.addItem(DB_KEYS[type], item);
-                if (result && !result.id && !result._id && result.msg !== 'success') {
-                    alert('Error: ' + (result.msg || 'Failed to save.'));
+                if (result && (result.error || (result.msg && result.msg !== 'success' && !result.id && !result._id))) {
+                    alert('Error: ' + (result.error || result.msg || 'Failed to save.'));
                     return;
                 }
             }

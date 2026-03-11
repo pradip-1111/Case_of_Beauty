@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial content
     switchTab('dashboard');
     setupAdminModal();
+    window.toggleSidebar = () => {
+        const sidebar = document.querySelector('.sidebar-modern');
+        sidebar.classList.toggle('active');
+    };
 });
 
 const currentView = {
@@ -530,4 +534,8 @@ window.viewOrderDetails = async function (orderId) {
 window.switchTab = switchTab;
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.toggleSidebar = window.toggleSidebar || (() => {
+    const sidebar = document.querySelector('.sidebar-modern');
+    if (sidebar) sidebar.classList.toggle('active');
+});
 

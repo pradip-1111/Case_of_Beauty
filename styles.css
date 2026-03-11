@@ -2372,6 +2372,79 @@ tbody tr:hover td {
     object-fit: contain;
 }
 
+@media (max-width: 768px) {
+    .video-modal-content {
+        width: 92vw;
+        max-width: 420px;
+        border-radius: 20px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .video-side-by-side {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .video-player-container {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        flex: none;
+        background: #000;
+    }
+
+    #main-video-player {
+        max-height: unset;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .video-product-info {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .video-product-info img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 10px;
+        align-self: center;
+    }
+
+    .video-product-info h3 {
+        font-size: 0.95rem;
+        text-align: center;
+        margin: 0;
+    }
+
+    .video-product-info p {
+        font-size: 0.82rem;
+        color: #666;
+        text-align: center;
+        margin: 0;
+    }
+
+    .modal-product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+    .close-modal {
+        top: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+    }
+}
+
+
 /* =============================================
    CART ICON & BADGE
    ============================================= */

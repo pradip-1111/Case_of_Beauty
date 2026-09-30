@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Case of Beauty</title>
+    <title>Case of Beauty | Luxury Botanical Skincare</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .profile-header {
             padding: 1rem 0;
@@ -20,7 +21,7 @@
         }
 
         .badge {
-            background: #FFB7C5;
+            background: #2d6a4f;
             color: #fff;
             padding: 4px 12px;
             border-radius: 20px;
@@ -29,25 +30,239 @@
             margin-top: 5px;
         }
 
-        .add-hero-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
         .user-dropdown {
             position: relative;
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        /* Ambient Sound Button */
+        .sound-toggle-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .sound-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.08);
+        }
+        .sound-toggle-btn.playing {
+            background: #d4af37;
+            color: #081c15;
+            border-color: #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+
+        /* ======================================
+           FIXED FLOATING JAR — travels full page
+        ====================================== */
+        #floating-jar-root {
+            position: fixed;
+            left: 50%;
+            top: 10vh;                 /* starts near top of screen */
+            transform: translateX(-50%);
+            width: 240px;
+            height: 200px;
+            z-index: 1500;             /* below all modals (2000+) but above page content */
+            pointer-events: none;
+            perspective: 900px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            transition: top 0.05s linear;
+        }
+
+        /* Outer glow ring */
+        .jar-glow-ring {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 28px;
+            background: radial-gradient(ellipse, rgba(212, 175, 55, 0.55) 0%, transparent 72%);
+            border-radius: 50%;
+            animation: jarGlowPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes jarGlowPulse {
+            0%, 100% { opacity: 0.7; transform: translateX(-50%) scaleX(1); }
+            50% { opacity: 1; transform: translateX(-50%) scaleX(1.12); }
+        }
+
+        /* Full jar wrapper — proper round cosmetic cream jar */
+        .jar-3d {
+            position: relative;
+            width: 180px;
+            height: 130px;          /* Short & wide = real cream jar */
+            animation: floatBob 3s ease-in-out infinite;
+            will-change: transform;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: filter 0.3s ease;
+            filter: drop-shadow(0 20px 35px rgba(0,0,0,0.55));
+            z-index: 999;
+        }
+        .jar-3d:hover {
+            filter: drop-shadow(0 25px 45px rgba(212, 175, 55, 0.55));
+        }
+
+        @keyframes floatBob {
+            0%   { transform: translateY(0px) rotateY(-6deg); }
+            50%  { transform: translateY(-16px) rotateY(6deg); }
+            100% { transform: translateY(0px) rotateY(-6deg); }
+        }
+
+        /* Lid — wide flat bamboo-style lid (sits on top of body) */
+        .jar-lid-part {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 178px;          /* Slightly wider than body */
+            height: 42px;
+            background: linear-gradient(180deg,
+                #c8a84b 0%,
+                #a0732a 25%,
+                #d4af37 50%,
+                #8b5e1a 75%,
+                #c8a84b 100%);
+            border-radius: 90px 90px 6px 6px;  /* Very rounded top = dome lid */
+            border: none;
+            box-shadow:
+                0 -3px 12px rgba(212, 175, 55, 0.4),
+                inset 0 3px 8px rgba(255,255,255,0.3),
+                inset 0 -2px 6px rgba(0,0,0,0.25),
+                0 6px 12px rgba(0,0,0,0.4);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 4;
+        }
+        /* Horizontal wood-grain lines on bamboo lid */
+        .jar-lid-part::before {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 8%;
+            width: 84%;
+            height: 1.5px;
+            background: rgba(0,0,0,0.15);
+            box-shadow: 0 5px 0 rgba(0,0,0,0.1), 0 10px 0 rgba(255,255,255,0.1);
+        }
+        /* Gold inner ring on lid edge */
+        .jar-lid-part::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #8b5e1a, #d4af37, #f0d060, #d4af37, #8b5e1a);
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* Jar body — wide, short, round cosmetic cream jar */
+        .jar-body-part {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 170px;
+            height: 90px;            /* Short wide cylinder */
+            background: linear-gradient(160deg,
+                #f0f0e8 0%,
+                #e8e0d0 20%,
+                #d4c9b0 50%,
+                #c8bfa8 80%,
+                #b8ad95 100%);
+            border-radius: 12px 12px 50px 50px;  /* Flat top, round bottom = jar */
+            border: 1.5px solid rgba(255,255,255,0.5);
+            box-shadow:
+                inset 6px 0 18px rgba(255,255,255,0.4),
+                inset -6px 0 18px rgba(0,0,0,0.1),
+                inset 0 -6px 15px rgba(0,0,0,0.15),
+                0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* Glass/cream shine on body */
+        .jar-body-part::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            width: 35px;
+            height: 55px;
+            background: linear-gradient(160deg, rgba(255,255,255,0.55) 0%, transparent 100%);
+            border-radius: 50%;
+        }
+
+        /* Label on jar body */
+        .jar-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            width: 110px;
+            text-align: center;
+            z-index: 4;
+        }
+        .jar-label-leaf {
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 2px;
+            animation: leafSpin 6s linear infinite;
+        }
+        @keyframes leafSpin {
+            0%   { transform: rotate(0deg) scale(1); }
+            50%  { transform: rotate(180deg) scale(1.15); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        .jar-label-text {
+            font-size: 0.48rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            color: #3a2a0a;
+            text-transform: uppercase;
+            line-height: 1.4;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Shimmer particles floating around jar */
+        .jar-particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: #d4af37;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 4s ease-in-out infinite;
+        }
+        .jar-particle:nth-child(1) { left: 10%; top: 30%; animation-delay: 0s; }
+        .jar-particle:nth-child(2) { left: 80%; top: 20%; animation-delay: 1s; width:4px; height:4px; }
+        .jar-particle:nth-child(3) { left: 20%; top: 70%; animation-delay: 2s; width:3px; height:3px; }
+        .jar-particle:nth-child(4) { left: 70%; top: 65%; animation-delay: 0.5s; }
+        .jar-particle:nth-child(5) { left: 50%; top: 10%; animation-delay: 1.5s; width:3px; height:3px; }
+
+        @keyframes particleFloat {
+            0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+            30%  { opacity: 0.9; }
+            100% { opacity: 0; transform: translateY(-40px) scale(1); }
+        }
+
+        /* Lid opens on hover */
+        .jar-3d:hover .jar-lid-part {
+            transform: translateX(-50%) translateY(-28px) rotateX(40deg);
         }
     </style>
 </head>
@@ -56,166 +271,81 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
-        ✨ BUY 2 GET 2 + 2 FREE GIFTS ✨
+        ✨ CASE OF BEAUTY — Buy Any 3 Organic Luxuries At ₹999 + Free Express Shipping ✨
     </div>
 
-    <!-- Header -->
-    <header class="main-header">
-        <div class="header-top">
-            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
+    <!-- Hero Showcase Section -->
+    <section class="prakriti-hero" style="background-image: linear-gradient(to bottom, rgba(8, 28, 21, 0.4), rgba(8, 28, 21, 0.75)), url('assets/hero_waterfall.jpg'); overflow: visible; position: relative; z-index: 10;">
+        
+        <!-- Header / Glass Nav -->
+        <header class="prakriti-header">
+            <div class="prakriti-logo">
+                <a href="index.html" class="brand-title" style="letter-spacing: 0.18em;">CASE OF BEAUTY</a>
+                <span class="brand-sub">BOTANICAL RITUALS</span>
             </div>
-            <div class="logo-container">
-                <a href="index.html" class="logo-text">Case of Beauty</a>
-            </div>
-            <div class="header-icons">
-                <i class="fas fa-search"></i>
+
+            <nav class="prakriti-nav">
+                <a href="index.html" class="prakriti-link active">HOME</a>
+                <a href="#about" onclick="showInfoModal('about')" class="prakriti-link">OUR STORY</a>
+                <a href="#shop" class="prakriti-link">PRODUCT</a>
+                <a href="#blog" onclick="showInfoModal('blog')" class="prakriti-link">BLOG</a>
+                <a href="#reviews-section" class="prakriti-link">REVIEW</a>
+            </nav>
+
+            <div class="prakriti-header-actions">
+                <!-- Search bar toggle -->
+                <div class="search-box-wrapper">
+                    <input type="text" id="live-search-input" placeholder="Search 20+ products..." oninput="handleSearch(this.value)">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+
+                <a href="#footer-contact" class="prakriti-contact-btn">CONTACT US</a>
+                
+                <button class="sound-toggle-btn" id="sound-btn" onclick="toggleNatureSound()" title="Toggle Nature Stream Sound">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+
                 <div class="user-dropdown">
                     <i class="fas fa-user-circle" id="profile-btn" onclick="toggleProfileModal()"
-                        style="display:none; cursor:pointer; font-size:1.2rem;"></i>
-                    <i class="fas fa-user" id="auth-btn" onclick="toggleAuthModal()"></i>
+                        style="display:none; cursor:pointer; font-size:1.3rem; color: #d4af37;"></i>
+                    <i class="fas fa-user" id="auth-btn" onclick="toggleAuthModal()" style="color: white; cursor:pointer;"></i>
                 </div>
-                <div class="cart-icon-wrapper" onclick="openCart()">
-                    <i class="fas fa-shopping-bag"></i>
+
+                <div class="cart-icon-wrapper" onclick="openCart()" style="cursor:pointer; position:relative; color:white;">
+                    <i class="fas fa-shopping-bag" style="font-size: 1.2rem;"></i>
                     <span id="cart-badge" class="cart-badge" style="display:none;">0</span>
                 </div>
-                <button id="admin-link" onclick="location.href='admin.html'"
-                    style="display:none; background: #FFB7C5; border:none; border-radius:4px; padding: 5px 10px; cursor:pointer; font-weight:600;">Admin</button>
-            </div>
-        </div>
-        <nav class="header-nav">
-            <ul class="nav-menu">
-                <li><a href="#shop" class="nav-link">Shop All</a></li>
-                <li><a href="#insta-viral" class="nav-link">#InstaViral 🔥</a></li>
-                <li class="has-mega-menu">
-                    <a href="javascript:void(0)" class="nav-link" onclick="toggleMegaMenu()">Shop By ⌵</a>
-                    <div id="mega-menu" class="mega-menu">
-                        <div class="mega-menu-container">
-                            <div class="mega-column">
-                                <img src="assets/mega-menu/category.png" alt="Category">
-                                <h3>Shop by Category</h3>
-                                <ul class="mega-links">
-                                    <li><a href="#shop" onclick="filterByCategory('All Categories')">All Categories</a>
-                                    </li>
-                                    <li><a href="#shop" onclick="filterByCategory('Sunscreens')">Sunscreens</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Face Serums')">Face Serums</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Moisturisers')">Moisturisers</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Face Cleansers')">Face Cleansers</a>
-                                    </li>
-                                    <li><a href="#shop" onclick="filterByCategory('Eye Care')">Eye Care</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Face Mask')">Face Mask</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Face Mists & Toners')">Face Mists &
-                                            Toners</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Body Lotion')">Body Lotion</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Body Wash')">Body Wash</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Body Mist')">Body Mist</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Hair Care')">Hair Care</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Lip Care')">Lip Care</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Perfumes')">Perfumes</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Makeup')">Makeup</a></li>
-                                </ul>
-                            </div>
-                            <div class="mega-column">
-                                <img src="assets/mega-menu/range.png" alt="Range">
-                                <h3>Shop by Range</h3>
-                                <ul class="mega-links">
-                                    <li><a href="#shop" onclick="filterByCategory('All Ranges')">All Ranges</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('7D HydroBurst Range')">7D HydroBurst
-                                            Range</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Vibran C Range')">Vibran C Range</a>
-                                    </li>
-                                    <li><a href="#shop" onclick="filterByCategory('AcneXpert Range')">AcneXpert
-                                            Range</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('DermaSoothe Range')">DermaSoothe
-                                            Range</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Perfumes')">Perfumes</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Hello Kitty')">Hello Kitty</a></li>
-                                </ul>
-                            </div>
-                            <div class="mega-column">
-                                <img src="assets/mega-menu/concern.png" alt="Concern">
-                                <h3>Shop by Concern</h3>
-                                <ul class="mega-links">
-                                    <li><a href="#shop" onclick="filterByCategory('Dryness')">Dryness</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Dullness & Pigmentation')">Dullness &
-                                            Pigmentation</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Winkles & Fine Lines')">Winkles &
-                                            Fine Lines</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Damaged Skin Barrier')">Damaged Skin
-                                            Barrier</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Active Acne')">Active Acne</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Oil Control, Pores')">Oil Control,
-                                            Pores</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Ingrown Hair')">Ingrown Hair</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Dark Spots & Tanning')">Dark Spots &
-                                            Tanning</a></li>
-                                </ul>
-                            </div>
-                            <div class="mega-column">
-                                <img src="assets/mega-menu/skin-type.png" alt="Skin Type">
-                                <h3>Shop by Skin Type</h3>
-                                <ul class="mega-links">
-                                    <li><a href="#shop" onclick="filterByCategory('Normal to Combination')">Normal to
-                                            Combination</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Dry')">Dry</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Oily & Acne Prone')">Oily & Acne
-                                            Prone</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Sensitive')">Sensitive</a></li>
-                                </ul>
-                            </div>
-                            <div class="mega-column">
-                                <img src="assets/mega-menu/ingredient.png" alt="Ingredient">
-                                <h3>Shop by Ingredient</h3>
-                                <ul class="mega-links">
-                                    <li><a href="#shop" onclick="filterByCategory('Hyaluronic')">Hyaluronic</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Peptide')">Peptide</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Niacinamide')">Niacinamide</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Vitamin C')">Vitamin C</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Ceramides')">Ceramides</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Vitamin E')">Vitamin E</a></li>
-                                    <li><a href="#shop" onclick="filterByCategory('Salicylic Acid')">Salicylic Acid</a>
-                                    </li>
-                                    <li><a href="#shop" onclick="filterByCategory('Keratin')">Keratin</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li><a href="#new-launches" class="nav-link" style="color: #4A90E2;">Hello Kitty (New)</a></li>
-                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Sunscreens')">Sunscreens</a></li>
-                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Moisturizers')">Moisturizers</a></li>
-                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Perfumes')">Perfumes</a></li>
-                <li><a href="#new-launches" class="nav-link">What's New ?</a></li>
-                <li><a href="#shop" class="nav-link" onclick="filterByCategory('Combos')">Gifts & Combos</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <!-- Hero Banner Slider -->
-    <section class="banner-slider">
-        <button id="add-herb-btn" class="add-hero-btn" style="display:none;" onclick="triggerHeroUpload()">
-            <i class="fas fa-plus"></i> Add Slide
-        </button>
-        <input type="file" id="hero-upload-input" style="display:none;" accept="image/*"
-            onchange="handleHeroUpload(this)">
-        <div id="banner-container" class="banner-container">
-            <!-- Banners injected by JS -->
-            <div class="banner-slide active"
-                style="background-image: url('https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=1200&q=80')">
-                <div class="banner-content">
-                    <h2 class="banner-title">Viral Mochi Milky Toner</h2>
-                    <p class="banner-subtitle">Brighter, Softer Skin. Hello Kitty Edition.</p>
-                    <a href="#shop" class="cta-btn">SHOP NOW</a>
-                </div>
+                <button id="admin-link" onclick="location.href='admin.html'"
+                    style="display:none; background: #d4af37; color:#081c15; border:none; border-radius:20px; padding: 6px 14px; cursor:pointer; font-weight:700;">Admin</button>
             </div>
+        </header>
+
+        <!-- Hero Content + Scroll-Interactive 3D Product Jar -->
+        <div class="prakriti-hero-content">
+            <div class="hero-badge">ORGANIC BOTANICAL FORMULATION</div>
+            <h1 class="hero-title">Nurtured By Nature, Crafted For Case of Beauty</h1>
+            
+
+            <p class="hero-desc">Experience cold-pressed elixirs, steam-distilled mists, and 24K Kashmiri Saffron formulas.</p>
+            
+            <div class="hero-cta-group">
+                <a href="#shop" class="hero-main-btn">EXPLORE ALL 20 PRODUCTS</a>
+            </div>
+
+            <!-- Scroll Down Pill -->
+            <a href="#shop" class="scroll-down-btn">
+                <span>SCROLL DOWN</span>
+                <i class="fas fa-chevron-down"></i>
+            </a>
         </div>
     </section>
 
     <!-- Flash Sale Banner -->
     <div id="flash-sale-banner" class="flash-sale-banner" style="display: none;">
         <div class="sale-content">
-            <span id="sale-title">FLASH SALE</span>
-            <span class="sale-discount" id="sale-discount">50% OFF</span>
+            <span id="sale-title">CASE OF BEAUTY SALE</span>
+            <span class="sale-discount" id="sale-discount">35% OFF</span>
             <div class="countdown" id="countdown">
                 <div><span id="days">00</span><small>Days</small></div>
                 <div><span id="hours">00</span><small>Hrs</small></div>
@@ -228,12 +358,12 @@
     <!-- Marquee -->
     <div class="marquee-bar">
         <div class="marquee-content">
-            <span class="marquee-item">😲 Case of Beauty 😜</span>
-            <span class="marquee-item">😍 Case of Beauty 😍</span>
-            <span class="marquee-item">😎 Case of Beauty 😲</span>
-            <span class="marquee-item">😲 Case of Beauty 😜</span>
-            <span class="marquee-item">😍 Case of Beauty 😍</span>
-            <span class="marquee-item">😎 Case of Beauty 😲</span>
+            <span class="marquee-item">✨ CASE OF BEAUTY ORGANICS ✨</span>
+            <span class="marquee-item">🌿 100% VEGAN & CRUELTY-FREE 🌿</span>
+            <span class="marquee-item">🌱 NO PARABENS OR SULFATES 🌱</span>
+            <span class="marquee-item">✨ CASE OF BEAUTY ORGANICS ✨</span>
+            <span class="marquee-item">🌿 100% VEGAN & CRUELTY-FREE 🌿</span>
+            <span class="marquee-item">🌱 NO PARABENS OR SULFATES 🌱</span>
         </div>
     </div>
 
@@ -245,7 +375,7 @@
         </div>
         <div class="feature-item">
             <div class="feature-icon"><i class="fas fa-hand-holding-heart"></i></div>
-            <span>SAFE<br>INGREDIENTS</span>
+            <span>SAFE<br>BOTANICALS</span>
         </div>
         <div class="feature-item">
             <div class="feature-icon"><i class="fas fa-flask"></i></div>
@@ -265,278 +395,355 @@
         </div>
     </section>
 
-    <!-- New Launches -->
-    <section id="new-launches" class="new-launches container">
-        <h2 class="section-title">New Launches</h2>
-        <p class="section-subtitle">Our new launches are here to vibe with every mood shift.</p>
-        <div id="new-launches-grid" class="product-grid">
-            <!-- Injected by JS -->
+    <!-- Category Filter Tabs -->
+    <section id="shop" class="container" style="padding-top: 2rem;">
+        <h2 class="section-title">Case of Beauty Catalog</h2>
+        <p class="section-subtitle">20 pure, potent formulations designed to elevate your daily skincare rituals.</p>
+
+        <!-- Quick Filter Buttons -->
+        <div class="category-filter-tabs">
+            <button class="filter-tab active" onclick="filterByCategory('All Categories')">All (20)</button>
+            <button class="filter-tab" onclick="filterByCategory('Skincare')">Skincare (8)</button>
+            <button class="filter-tab" onclick="filterByCategory('Haircare')">Haircare (4)</button>
+            <button class="filter-tab" onclick="filterByCategory('Body Care')">Body Care (4)</button>
+            <button class="filter-tab" onclick="filterByCategory('Lip & Eye Care')">Lip & Eye Care (4)</button>
         </div>
-    </section>
-
-    <!-- Introduction Text -->
-    <section style="text-align: center; padding: 4rem 2rem; background: #fff;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Say Hello To Case of Beauty</h2>
-        <p style="max-width: 800px; margin: 0 auto; color: #666;">
-            Effective, clean, and most importantly fuss-free, we've got a product for every mood your skin is in –
-            expect potency, expect results, expect an expertly crafted solution!
-        </p>
-        <p style="margin-top: 1rem; font-weight: 600;">So go ahead, define your Case of Beauty!</p>
-    </section>
-
-    <!-- Shop/Bestsellers -->
-    <section id="shop" class="container">
-        <h2 class="section-title">Bestsellers</h2>
-        <p class="section-subtitle">Explore our Bestsellers for tried-and-true favorites that our customers can't live
-            without.</p>
 
         <div id="product-grid" class="product-grid">
             <!-- Products will be injected here by JS -->
         </div>
     </section>
 
+    <!-- Bestseller Showcase / New Launches -->
+    <section id="new-launches" class="new-launches container">
+        <h2 class="section-title">New Launches</h2>
+        <p class="section-subtitle">Freshly formulated botanical treasures created for radiant skin vitality.</p>
+        <div id="new-launches-grid" class="product-grid">
+            <!-- Injected by JS -->
+        </div>
+    </section>
+
     <!-- Community Voices (Videos) -->
     <section id="insta-viral" class="community-voices container">
-        <h2 class="section-title">#The Case of Beauty Community</h2>
+        <h2 class="section-title">#CaseOfBeauty Community</h2>
+        <p class="section-subtitle">Real skincare stories and glow routines shared by our community.</p>
         <div class="video-grid" id="video-container">
             <!-- Videos injected by JS -->
         </div>
     </section>
 
-    <!-- Case of Beauty For A Cause -->
-    <section class="moody-cause container">
-        <div class="cause-card">
-            <div class="cause-text" id="about-us">
-                <h2>Case of Beauty For A Cause</h2>
-                <p>Self-care is the key to a happier state of being. Through Case of Beauty we aim to create a safe
-                    space to
-                    talk about everything related to self-care and mental health.</p>
-                <button class="cta-btn secondary">KNOW MORE</button>
-            </div>
-            <div class="cause-img">
-                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80"
-                    alt="Case of Beauty Cause">
-            </div>
-        </div>
-    </section>
-
-    <!-- Reviews Section -->
-    <section class="reviews container">
-        <h2 class="section-title">What Our Community Says</h2>
-        <div class="reviews-slider" id="reviews-container">
+    <!-- Verified Customer Reviews -->
+    <section id="reviews-section" class="reviews-section container">
+        <h2 class="section-title">Customer Reviews</h2>
+        <p class="section-subtitle">See why over 10,000+ happy customers love Case of Beauty products.</p>
+        <div class="reviews-grid" id="review-container">
             <!-- Reviews injected by JS -->
         </div>
     </section>
 
-    <!-- Floating Buttons -->
-    <div class="rewards-btn">
-        <i class="fas fa-crown"></i> Rewards
-    </div>
-
-    <div class="whatsapp-btn">
-        <i class="fab fa-whatsapp"></i>
+    <!-- Information Modal -->
+    <div id="info-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px; padding: 2rem; position: relative;">
+            <span class="close-modal" onclick="closeInfoModal()" style="position: absolute; right: 20px; top: 15px; cursor: pointer; font-size: 1.5rem;">&times;</span>
+            <h2 id="info-title" style="margin-bottom: 1rem; color: #1b4332; font-family: 'Cormorant Garamond', serif;"></h2>
+            <div id="info-body" style="line-height: 1.6; color: #444;"></div>
+        </div>
     </div>
 
     <!-- Auth Modal -->
-    <div id="auth-modal" class="modal">
-        <div class="modal-content" style="width: 350px;">
-            <div class="close-modal" onclick="toggleAuthModal()"><i class="fas fa-times"></i></div>
-            <h2 id="auth-title">Login</h2>
-            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
-                <div class="form-group" id="name-group" style="display:none;">
-                    <label>Name</label>
-                    <input type="text" id="auth-name">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="auth-email" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="auth-pass" required>
-                </div>
-                <button type="submit" class="btn-primary" style="width:100%;">Continue</button>
-                <p style="margin-top: 1rem; text-align:center; font-size:0.9rem;">
-                    <span id="auth-switch-text">New here?</span>
-                    <a href="#" onclick="toggleAuthType()" style="color:#4A90E2;" id="auth-switch-link">Create
-                        account</a>
-                </p>
-            </form>
-        </div>
-    </div>
+    <div id="auth-modal" class="modal" style="display: none; position:fixed; inset:0; z-index:5000; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+        <div class="modal-content" style="max-width: 420px; width:90%; padding: 2rem; background:#fff; border-radius:16px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+            <span onclick="toggleAuthModal()" style="position:absolute; right:16px; top:12px; cursor:pointer; font-size:1.6rem; color:#888; line-height:1;">&times;</span>
 
-    <!-- Cart Sidebar Overlay -->
-    <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
-
-    <!-- Cart Sidebar -->
-    <div id="cart-sidebar" class="cart-sidebar">
-        <div class="cart-sidebar-header">
-            <h3><i class="fas fa-shopping-bag"></i> Your Cart</h3>
-            <button class="cart-close-btn" onclick="closeCart()"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="cart-items-scroll">
-            <div id="cart-items-list" class="cart-items-list"></div>
-        </div>
-        <div class="cart-sidebar-footer">
-            <div class="cart-total-row">
-                <span>Total</span>
-                <span id="cart-total" class="cart-total">₹0.00</span>
+            <!-- Logo -->
+            <div style="text-align:center; margin-bottom:1.2rem;">
+                <div style="font-size:1.8rem;">🌿</div>
+                <h2 id="auth-title" style="color:#1b4332; margin:0.3rem 0 0; font-family:'Outfit',sans-serif; font-weight:800; letter-spacing:0.05em;">Login</h2>
+                <p style="color:#888; font-size:0.85rem; margin:0.3rem 0 0;">Case of Beauty · Botanical Rituals</p>
             </div>
-            <button id="cart-checkout-btn" class="btn-checkout-main" onclick="goToCheckout()" disabled>
-                <i class="fas fa-lock"></i> Checkout
-            </button>
-            <button class="btn-continue-shopping" onclick="closeCart()">
-                <i class="fas fa-arrow-left"></i> Continue Shopping
-            </button>
+
+            <!-- Error message -->
+            <div id="auth-error" style="display:none; background:#fff0f0; color:#c0392b; border:1px solid #f5c6cb; border-radius:8px; padding:10px 14px; margin-bottom:1rem; font-size:0.88rem;"></div>
+
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)" autocomplete="on">
+                <!-- Name field (register only) -->
+                <div class="form-group" id="name-group" style="display:none; margin-bottom:1rem;">
+                    <label style="font-size:0.85rem; font-weight:600; color:#333;">Full Name</label>
+                    <input type="text" id="auth-name" placeholder="Enter your full name"
+                        style="width:100%; padding:11px 14px; border:1.5px solid #ddd; border-radius:8px; font-size:0.95rem; box-sizing:border-box; margin-top:4px;">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group" style="margin-bottom:1rem;">
+                    <label style="font-size:0.85rem; font-weight:600; color:#333;">Email Address</label>
+                    <input type="email" id="auth-email" required placeholder="your@email.com" autocomplete="email"
+                        style="width:100%; padding:11px 14px; border:1.5px solid #ddd; border-radius:8px; font-size:0.95rem; box-sizing:border-box; margin-top:4px;">
+                </div>
+
+                <!-- Password -->
+                <div class="form-group" style="margin-bottom:1.5rem;">
+                    <label style="font-size:0.85rem; font-weight:600; color:#333;">Password</label>
+                    <input type="password" id="auth-pass" required placeholder="Min. 6 characters" autocomplete="current-password"
+                        style="width:100%; padding:11px 14px; border:1.5px solid #ddd; border-radius:8px; font-size:0.95rem; box-sizing:border-box; margin-top:4px;">
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" id="auth-submit-btn"
+                    style="width:100%; padding:13px; background:#1b4332; color:white; border:none; border-radius:10px; font-weight:700; font-size:1rem; cursor:pointer; font-family:'Outfit',sans-serif; transition:background 0.2s;">
+                    Submit
+                </button>
+            </form>
+
+            <p style="text-align:center; margin-top:1.2rem; font-size:0.9rem; color:#555;">
+                <span id="auth-switch-text">Don't have an account?</span>&nbsp;
+                <a href="javascript:void(0)" onclick="toggleAuthType()" id="auth-switch-link"
+                    style="color:#2d6a4f; font-weight:700;">Register</a>
+            </p>
         </div>
     </div>
 
     <!-- Profile Modal -->
-    <div id="profile-modal" class="modal">
-        <div class="modal-content" style="width: 400px; text-align: center;">
-            <div class="close-modal" onclick="toggleProfileModal()"><i class="fas fa-times"></i></div>
-            <div class="profile-header">
-                <img src="https://ui-avatars.com/api/?name=User&background=FFB7C5&color=fff" id="profile-avatar"
-                    class="profile-avatar-large">
-                <h2 id="profile-name">User Name</h2>
-                <p id="profile-email">email@example.com</p>
-                <div id="profile-role-badge" class="badge">User</div>
+    <div id="profile-modal" class="modal" style="display:none; position:fixed; inset:0; z-index:5000; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+        <div class="modal-content" style="max-width:420px; width:90%; padding:0; background:#fff; border-radius:18px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden;">
+
+            <!-- Close -->
+            <span onclick="toggleProfileModal()" style="position:absolute; right:16px; top:12px; cursor:pointer; font-size:1.6rem; color:#fff; z-index:2; line-height:1;">&times;</span>
+
+            <!-- Green header banner -->
+            <div style="background:linear-gradient(135deg,#1b4332,#2d6a4f); padding:2rem 1.5rem 3.5rem; text-align:center; position:relative;">
+                <img id="profile-avatar" src="" alt="avatar"
+                    style="width:80px; height:80px; border-radius:50%; border:3px solid #d4af37; object-fit:cover; margin-bottom:0.8rem; background:#eee;">
+                <h3 id="profile-name" style="color:#fff; margin:0; font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700;">User</h3>
+                <p id="profile-email" style="color:rgba(255,255,255,0.75); margin:4px 0 0; font-size:0.85rem;">user@example.com</p>
             </div>
-            <div class="profile-links" style="margin-top:1.5rem; display:flex; flex-direction:column; gap:10px;">
-                <a href="my-orders.html" class="profile-nav-link"><i class="fas fa-box-open"></i> My Orders</a>
+
+            <!-- Role badge floating over banner -->
+            <div style="text-align:center; margin-top:-1.2rem; margin-bottom:1.2rem;">
+                <span id="profile-role-badge"
+                    style="background:#d4af37; color:#1b1b1b; padding:4px 18px; border-radius:20px; font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; box-shadow:0 2px 8px rgba(0,0,0,0.2);">CUSTOMER</span>
             </div>
-            <div class="profile-actions" style="margin-top: 1rem;">
-                <button class="btn-primary" style="width:100%;" onclick="SessionManager.logout()">Logout</button>
+
+            <!-- Action buttons -->
+            <div style="padding:0 1.5rem 1.5rem; display:flex; flex-direction:column; gap:10px;">
+                <button onclick="location.href='my-orders.html'"
+                    style="padding:13px; background:#1b4332; color:white; border:none; border-radius:10px; font-weight:700; font-size:0.95rem; cursor:pointer; font-family:'Outfit',sans-serif;">
+                    <i class="fas fa-box" style="margin-right:8px;"></i> View My Orders
+                </button>
+                <button onclick="SessionManager.logout()"
+                    style="padding:13px; background:#fff; color:#e11d48; border:2px solid #e11d48; border-radius:10px; font-weight:700; font-size:0.95rem; cursor:pointer; font-family:'Outfit',sans-serif;">
+                    <i class="fas fa-sign-out-alt" style="margin-right:8px;"></i> Logout
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Video Player Modal -->
-    <div id="video-modal" class="modal">
-        <div class="modal-content video-modal-content">
-            <div class="close-modal" onclick="closeVideoPlayer()"><i class="fas fa-times"></i></div>
-            <div class="video-side-by-side">
-                <div class="video-player-container">
-                    <video id="main-video-player" controls autoplay></video>
-                </div>
-                <div class="video-product-info">
-                    <img id="modal-product-img" src="" alt="Product">
-                    <h3 id="modal-product-title">Product Title</h3>
-                    <p id="modal-product-desc"></p>
-                    <div class="modal-product-footer">
-                        <span id="modal-product-price">₹0</span>
-                        <button id="modal-buy-btn" class="reel-buy-btn">BUY NOW</button>
-                    </div>
-                </div>
+    <!-- Slideout Cart Sidebar -->
+    <div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-bag" style="color: #d4af37;"></i> Your Shopping Bag</h3>
+            <button class="cart-close-btn" onclick="closeCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items-list">
+            <!-- Items injected by cart.js -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>Total Amount:</span>
+                <span id="cart-total">₹0.00</span>
             </div>
+            <button id="cart-checkout-btn" class="checkout-btn" onclick="goToCheckout()">
+                PROCEED TO CHECKOUT <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-column">
-                <p>Effective, clean, and fuss-free, we've got a product for every mood your skin is in. Our products are
-                    potent, result-driven and crafted by experts.</p>
-
-                <h4 id="contact-us">OFFICE ADDRESS</h4>
-                <div class="office-info">
-                    <strong>Kathmandu Office:</strong> Kathmandu Metropolitan City, Kathmandu 44600, Bagmati Province,
-                    Nepal
-                </div>
-                <div class="office-info">
-                    <strong>Birgunj Office:</strong> Birgunj Metropolitan City, Parsa 44300, Madhesh Province, Nepal
-                </div>
-
-                <div class="office-info" style="margin-top: 1.5rem;">
-                    <strong>Contact:</strong> <a href="tel:+9779802594674"
-                        style="color:#fff; text-decoration:none;">+977 9802594674</a>
-                </div>
-
-                <div class="office-info" style="margin-top: 2rem;">
-                    Mail us at: <a href="mailto:care@caseofbeauty.com"
-                        style="color:#fff; text-decoration:underline;">care@caseofbeauty.com</a>
-                </div>
+    <footer id="footer-contact" class="main-footer" style="background: #081c15; color: #e5e5e5; padding: 4rem 2rem 2rem 2rem;">
+        <div class="footer-container" style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem;">
+            <div>
+                <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: #d4af37; margin-bottom: 1rem;">CASE OF BEAUTY</h3>
+                <p style="color: #a3b18a; font-size: 0.9rem; line-height: 1.6;">Nurtured by nature, crafted for timeless skin vitality. 100% organic, vegan & cruelty-free cosmetics.</p>
             </div>
-
-            <div class="footer-links">
-                <h3>QUICK LINKS</h3>
-                <ul>
-                    <li><a href="#shop">Shop All</a></li>
-                    <li><a href="#shop">Bestsellers</a></li>
-                    <li><a href="javascript:void(0)" onclick="showInfoModal('press')">Press & Media</a></li>
-                    <li><a href="javascript:void(0)" onclick="showInfoModal('blog')">The Beauty Blog</a></li>
-                    <li><a href="#about-us">About Us</a></li>
-                    <li><a href="admin-login.html" style="color: #FFB7C5; font-weight: 600;">Admin Login</a></li>
+            <div>
+                <h4 style="color: #d4af37; margin-bottom: 1rem;">Quick Links</h4>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
+                    <li><a href="#shop" style="color: #ccc;">Shop All 20 Products</a></li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('about')" style="color: #ccc;">Our Story</a></li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('returns')" style="color: #ccc;">Returns & Refunds</a></li>
+                    <li><a href="javascript:void(0)" onclick="showInfoModal('terms')" style="color: #ccc;">Terms of Service</a></li>
                 </ul>
             </div>
-
-            <div class="footer-links">
-                <h3>INFORMATIONS & POLICIES</h3>
-                <ul>
-                    <li><a href="javascript:void(0)" onclick="showInfoModal('returns')">Returns & Refunds Policy</a>
-                    </li>
-                    <li><a href="javascript:void(0)" onclick="showInfoModal('terms')">Terms & Conditions</a></li>
-                    <li><a href="javascript:void(0)" onclick="showInfoModal('privacy')">Privacy Policy</a></li>
-                    <li><a href="#contact-us">Contact us</a></li>
-                    <li><a href="javascript:void(0)" onclick="showInfoModal('work')">Work with Us</a></li>
-                </ul>
+            <div>
+                <h4 style="color: #d4af37; margin-bottom: 1rem;">Contact Us</h4>
+                <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 8px;"><i class="fas fa-envelope" style="color:#d4af37;"></i> care@caseofbeauty.com</p>
+                <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 8px;"><i class="fas fa-phone" style="color:#d4af37;"></i> +91 98765 43210</p>
+                <p style="color: #ccc; font-size: 0.9rem;"><i class="fas fa-map-marker-alt" style="color:#d4af37;"></i> New Delhi, India</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Case of Beauty India. All Rights Reserved.</p>
-            <a href="admin-login.html" class="admin-footer-link">Admin Dashboard</a>
+        <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 3rem; padding-top: 1.5rem; color: #888; font-size: 0.85rem;">
+            © 2026 Case of Beauty · All Rights Reserved.
         </div>
     </footer>
-
-    <!-- Info Modal (Policies, About, etc) -->
-    <div id="info-modal" class="modal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="close-modal" onclick="closeInfoModal()"><i class="fas fa-times"></i></div>
-            <h2 id="info-title" style="margin-bottom: 1.5rem; color: #333;">Information</h2>
-            <div id="info-body"
-                style="line-height: 1.6; color: #666; max-height: 400px; overflow-y: auto; padding-right: 10px;">
-                <!-- Content injected by JS -->
-            </div>
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn-primary" onclick="closeInfoModal()">Close</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Scripts -->
     <script src="data.js"></script>
     <script src="cart.js"></script>
     <script src="script.js"></script>
     <script>
-        function toggleMegaMenu() {
-            const menu = document.getElementById('mega-menu');
-            menu.classList.toggle('active');
+        // =============================================
+        // FIXED FLOATING JAR — travels ENTIRE PAGE
+        // Scroll 0% → jar at top of screen
+        // Scroll 100% → jar at bottom of screen
+        // Lid opens progressively as you scroll down
+        // =============================================
+        (function() {
+            const jarRoot = document.getElementById('floating-jar-root');
+            const jar     = document.getElementById('scroll-floating-jar');
+            const lid     = document.getElementById('jar-lid');
+
+            let ticking = false;
+
+            function updateJar() {
+                const sc      = window.scrollY;
+                const maxSc   = document.body.scrollHeight - window.innerHeight;
+                const progress = maxSc > 0 ? sc / maxSc : 0;   // 0 at top, 1 at bottom
+
+                // Map progress to viewport: top=8vh, bottom=78vh
+                const topVh = 8 + progress * 70;   // 8vh → 78vh
+                jarRoot.style.top = topVh + 'vh';
+
+                // Gentle side sway while moving
+                const sway  = Math.sin(sc * 0.015) * 18;   // ±18deg Y rotation
+                const scale = 1 + progress * 0.15;           // grows slightly
+
+                jar.style.animation = 'none';
+                jar.style.transform = `rotateY(${sway}deg) scale(${scale})`;
+
+                // Lid opens from 0° (top) → 50° (bottom)
+                if (lid) {
+                    const lidOpen = progress * 50;       // 0–50deg
+                    const lidRise = progress * -30;      // rises up as it opens
+                    lid.style.transition = 'none';
+                    lid.style.transform  =
+                        `translateX(-50%) translateY(${lidRise}px) rotateX(${lidOpen}deg)`;
+                }
+
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(updateJar);
+                    ticking = true;
+                }
+            });
+
+            // Run once on load
+            updateJar();
+        })();
+
+        // Web Audio Synthesizer for Ambient Nature Stream Sound
+        let audioCtx = null;
+        let isPlayingSound = false;
+
+        function toggleNatureSound() {
+            const btn = document.getElementById('sound-btn');
+            if (isPlayingSound) {
+                if (audioCtx) audioCtx.suspend();
+                isPlayingSound = false;
+                btn.classList.remove('playing');
+                btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    createNatureStreamSound(audioCtx);
+                } else {
+                    audioCtx.resume();
+                }
+                isPlayingSound = true;
+                btn.classList.add('playing');
+                btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
         }
 
-        // Close mega menu when clicking outside
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('mega-menu');
-            const shopByLink = document.querySelector('.has-mega-menu > a');
-            if (menu && !menu.contains(e.target) && e.target !== shopByLink) {
-                menu.classList.remove('active');
+        function createNatureStreamSound(ctx) {
+            const bufferSize = 2 * ctx.sampleRate,
+                noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate),
+                output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
             }
-        });
+            const whiteNoise = ctx.createBufferSource();
+            whiteNoise.buffer = noiseBuffer;
+            whiteNoise.loop = true;
 
-        function toggleMobileMenu() {
-            const nav = document.querySelector('.header-nav');
-            const icon = document.querySelector('.mobile-menu-toggle i');
-            nav.classList.toggle('active');
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 800;
 
-            if (nav.classList.contains('active')) {
-                icon.classList.replace('fa-bars', 'fa-times');
-                document.body.style.overflow = 'hidden'; // Prevent scroll
-            } else {
-                icon.classList.replace('fa-times', 'fa-bars');
-                document.body.style.overflow = ''; // Restore scroll
+            const gain = ctx.createGain();
+            gain.gain.value = 0.08;
+
+            whiteNoise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            whiteNoise.start();
+        }
+
+        // Live Search Handler
+        function handleSearch(query) {
+            query = query.trim().toLowerCase();
+            const grid = document.getElementById('product-grid');
+            if (!grid) return;
+
+            if (!query) {
+                renderProducts();
+                return;
             }
+
+            DataManager.getData(DB_KEYS.PRODUCTS).then(products => {
+                const filtered = products.filter(p =>
+                    p.name.toLowerCase().includes(query) ||
+                    (p.category && p.category.toLowerCase().includes(query)) ||
+                    (p.tag && p.tag.toLowerCase().includes(query)) ||
+                    (p.description && p.description.toLowerCase().includes(query))
+                );
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; padding: 4rem; color: #888;">No products matching "${query}".</p>`;
+                } else {
+                    grid.innerHTML = filtered.map(p => createProductCard(p)).join('');
+                    initScrollAnimations();
+                }
+            });
         }
     </script>
-</body>
+    <!-- =============================================
+         FIXED FLOATING JAR — travels the entire page
+    ============================================== -->
+    <div id="floating-jar-root">
+        <!-- Golden glow beneath jar -->
+        <div class="jar-glow-ring"></div>
 
+        <!-- Gold shimmer particles -->
+        <div class="jar-particle"></div>
+        <div class="jar-particle"></div>
+        <div class="jar-particle"></div>
+        <div class="jar-particle"></div>
+        <div class="jar-particle"></div>
+
+        <!-- The 3D Jar -->
+        <div class="jar-3d" id="scroll-floating-jar" style="pointer-events: auto;" title="Scroll to open!">
+            <div class="jar-lid-part" id="jar-lid"></div>
+            <div class="jar-body-part">
+                <div class="jar-label">
+                    <span class="jar-label-leaf">🌿</span>
+                    <span class="jar-label-text">CASE OF<br>BEAUTY</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
 </html>

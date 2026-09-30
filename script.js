@@ -81,6 +81,16 @@ window.filterByCategory = async function (categoryTitle) {
     const grid = document.getElementById('product-grid');
     if (!grid || !products) return;
 
+    // Update Category Filter Tabs active state
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        if (tab.innerText.toLowerCase().includes(categoryTitle.toLowerCase()) || 
+           (categoryTitle.includes('All') && tab.innerText.includes('All'))) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
     // Scroll to shop section
     const shopSection = document.getElementById('shop');
     if (shopSection) {
@@ -89,7 +99,7 @@ window.filterByCategory = async function (categoryTitle) {
 
     // Filter products
     let filtered;
-    if (categoryTitle === 'All Categories' || categoryTitle === 'All Ranges' || categoryTitle === 'Shop All') {
+    if (categoryTitle === 'All Categories' || categoryTitle === 'All Ranges' || categoryTitle === 'Shop All' || categoryTitle === 'All') {
         filtered = products;
     } else {
         const query = categoryTitle.toLowerCase();
@@ -101,26 +111,62 @@ window.filterByCategory = async function (categoryTitle) {
         );
     }
 
-    // Update section title if it's the main shop grid
-    const sectionTitle = shopSection ? shopSection.querySelector('.section-title') : null;
-    if (sectionTitle) {
-        sectionTitle.innerText = categoryTitle === 'All Categories' || categoryTitle === 'Shop All' ? 'Bestsellers' : categoryTitle;
-    }
-
     if (filtered.length === 0) {
-        grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; padding: 4rem; color: #999;">No products found for "${categoryTitle}". Showing everything instead.</p>`;
+        grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; padding: 4rem; color: #888;">No products found for "${categoryTitle}". Showing all 20 products.</p>`;
         setTimeout(() => {
             grid.innerHTML = products.map(p => createProductCard(p)).join('');
-            if (sectionTitle) sectionTitle.innerText = 'Bestsellers';
-        }, 3000);
+        }, 2000);
     } else {
         grid.innerHTML = filtered.map(p => createProductCard(p)).join('');
     }
-
-    // Close mega menu if open
-    const menu = document.getElementById('mega-menu');
-    if (menu) menu.classList.remove('active');
 };
+
+function createProductCard(product) {
+    const id = product._id || product.id;
+    const finalPrice = product.discount_price || product.price;
+    const originalPrice = product.discount_price ? product.price : null;
+
+    return `
+        <div class="product-card">
+            <div class="product-image-container" style="position:relative; overflow:hidden; border-radius:12px;">
+                <span class="tag ${product.tag ? product.tag.toLowerCase().replace(/\s+/g, '') : 'new'}">${product.tag || 'NEW'}</span>
+                <span class="discount-badge">BUY 3 @ ₹999</span>
+                <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy" style="width:100%; height:260px; object-fit:cover; transition:transform 0.5s ease;">
+            </div>
+            <div class="product-info" style="padding:1.2rem; text-align:left;">
+                <h3 class="product-title" style="font-size:1.05rem; font-weight:600; margin-bottom:0.4rem; color:#1b4332;">${product.name}</h3>
+                <p class="product-desc" style="font-size:0.85rem; color:#666; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:0.8rem;">${product.description}</p>
+                <div class="rating" style="color:#d4af37; font-size:0.85rem; display:flex; align-items:center; gap:4px; margin-bottom:0.6rem;">
+                    ${getStars(product.rating || 4.9)} 
+                    <span style="color: #666; font-size: 0.8rem; margin-left:4px;">${product.rating || 4.9} (${product.reviews_count || product.reviews || 120})</span>
+                </div>
+                <div class="product-price" style="display:flex; align-items:center; gap:8px; margin-bottom:1rem;">
+                    <span style="font-size:1.15rem; font-weight:700; color:#1b4332;">₹${finalPrice.toFixed(0)}</span>
+                    ${originalPrice ? `<span style="font-size:0.9rem; color:#999; text-decoration:line-through;">₹${originalPrice.toFixed(0)}</span>` : ''}
+                </div>
+                <button class="cta-btn" onclick="addToCartFlow(${JSON.stringify({ id: id, name: product.name, price: finalPrice, image: product.image }).replace(/"/g, '&quot;')})" style="width: 100%; padding: 10px; background:#1b4332; color:white; border:none; border-radius:6px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.3s ease;">ADD TO BAG</button>
+            </div>
+        </div>
+    `;
+}
+
+function getStars(rating) {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+        if (i <= Math.floor(rating)) {
+            stars.push('<i class="fas fa-star"></i>');
+        } else if (i - rating < 1) {
+            stars.push('<i class="fas fa-star-half-alt"></i>');
+        } else {
+            stars.push('<i class="far fa-star"></i>');
+        }
+    }
+    return stars.join('');
+}
+
+function addToCartFlow(product) {
+    CartManager.addItem(product);
+}
 
 async function loadTopBar() {
     try {
@@ -272,29 +318,68 @@ async function renderProducts() {
         const newLaunches = products.filter(p => p.is_new_launch || p.tag === 'NEW');
         newGrid.innerHTML = newLaunches.map(p => createProductCard(p)).join('');
     }
+
+    initScrollAnimations();
 }
 
 function createProductCard(product) {
     const id = product._id || product.id;
+    const finalPrice = product.discount_price || product.price;
+    const originalPrice = product.discount_price ? product.price : null;
+    const fallbackImg = 'https://images.unsplash.com/photo-1608248597261-e4d044696386?w=800&auto=format&fit=crop&q=80';
+
     return `
         <div class="product-card">
-            <div class="product-image-container">
-                <span class="tag ${product.tag ? product.tag.toLowerCase().replace(' ', '') : 'new'}">${product.tag || 'NEW'}</span>
-                <span class="discount-badge">BUY 3 @ 999</span>
-                <img src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-image-container" style="position:relative; overflow:hidden; border-radius:12px 12px 0 0;">
+                <span class="tag ${product.tag ? product.tag.toLowerCase().replace(/\s+/g, '') : 'new'}">${product.tag || 'NEW'}</span>
+                <span class="discount-badge">BUY 3 @ ₹999</span>
+                <img src="${product.image || fallbackImg}" 
+                     alt="${product.name}" 
+                     class="product-image" 
+                     loading="lazy" 
+                     onerror="this.onerror=null; this.src='${fallbackImg}'"
+                     style="width:100%; height:260px; object-fit:cover; transition:transform 0.5s ease;">
             </div>
-            <div class="product-info">
-                <h3 class="product-title">${product.name}</h3>
-                <p class="product-desc">${product.description}</p>
-                <div class="rating">
-                    ${getStars(product.rating || 5)} 
-                    <span style="color: #999; font-size: 0.8rem;">(${product.reviews || 0} Reviews)</span>
+            <div class="product-info" style="padding:1.2rem; text-align:left;">
+                <h3 class="product-title" style="font-size:1.05rem; font-weight:600; margin-bottom:0.4rem; color:#1b4332;">${product.name}</h3>
+                <p class="product-desc" style="font-size:0.85rem; color:#666; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:0.8rem;">${product.description}</p>
+                <div class="rating" style="color:#d4af37; font-size:0.85rem; display:flex; align-items:center; gap:4px; margin-bottom:0.6rem;">
+                    ${getStars(product.rating || 4.9)} 
+                    <span style="color: #666; font-size: 0.8rem; margin-left:4px;">${product.rating || 4.9} (${product.reviews_count || product.reviews || 120})</span>
                 </div>
-                <div class="product-price" style="margin-top: 10px;">Rs. ${product.price.toFixed(2)}</div>
-                <button class="cta-btn" onclick="addToCartFlow(${JSON.stringify({ id: id, name: product.name, price: product.price, image: product.image }).replace(/"/g, '&quot;')})" style="margin-top: 15px; width: 100%; padding: 8px;">ADD TO CART</button>
+                <div class="product-price" style="display:flex; align-items:center; gap:8px; margin-bottom:1rem;">
+                    <span style="font-size:1.15rem; font-weight:700; color:#1b4332;">₹${finalPrice.toFixed(0)}</span>
+                    ${originalPrice ? `<span style="font-size:0.9rem; color:#999; text-decoration:line-through;">₹${originalPrice.toFixed(0)}</span>` : ''}
+                </div>
+                <button class="cta-btn" onclick="addToCartFlow(${JSON.stringify({ id: id, name: product.name, price: finalPrice, image: product.image || fallbackImg }).replace(/"/g, '&quot;')})" style="width: 100%; padding: 10px; background:#1b4332; color:white; border:none; border-radius:6px; font-weight:700; cursor:pointer; letter-spacing:0.05em; transition:all 0.3s ease;">ADD TO BAG</button>
             </div>
         </div>
     `;
+}
+
+// Intersection Observer for Smooth Scroll Reveal Animation
+function initScrollAnimations() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.12
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Staggered delay animation
+                setTimeout(() => {
+                    entry.target.classList.add('reveal-visible');
+                }, (index % 4) * 80);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.product-card, .category-item, .feature-item').forEach(el => {
+        observer.observe(el);
+    });
 }
 
 // Auth UI Logic
@@ -302,12 +387,20 @@ let isLoginMode = true;
 
 function toggleAuthModal() {
     const modal = document.getElementById('auth-modal');
-    modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    const isOpen = modal.style.display === 'flex';
+    modal.style.display = isOpen ? 'none' : 'flex';
+    if (!isOpen) {
+        // Reset form on open
+        document.getElementById('auth-form').reset();
+        const errDiv = document.getElementById('auth-error');
+        if (errDiv) errDiv.style.display = 'none';
+    }
 }
 
 function toggleProfileModal() {
     const modal = document.getElementById('profile-modal');
-    if (modal.style.display === 'flex') {
+    const isOpen = modal.style.display === 'flex';
+    if (isOpen) {
         modal.style.display = 'none';
     } else {
         renderProfileInfo();
@@ -316,12 +409,19 @@ function toggleProfileModal() {
 }
 
 function renderProfileInfo() {
-    const userRole = SessionManager.getRole();
-    const email = localStorage.getItem('cob_user_email') || 'User';
-    document.getElementById('profile-name').innerText = email.split('@')[0];
-    document.getElementById('profile-email').innerText = email;
-    document.getElementById('profile-role-badge').innerText = userRole.toUpperCase();
-    document.getElementById('profile-avatar').src = `https://ui-avatars.com/api/?name=${email}&background=FFB7C5&color=fff`;
+    const role  = SessionManager.getRole() || 'user';
+    const email = SessionManager.getEmail() || localStorage.getItem('cob_user_email') || 'user@example.com';
+    const name  = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    const nameEl   = document.getElementById('profile-name');
+    const emailEl  = document.getElementById('profile-email');
+    const roleEl   = document.getElementById('profile-role-badge');
+    const avatarEl = document.getElementById('profile-avatar');
+
+    if (nameEl)   nameEl.textContent  = name;
+    if (emailEl)  emailEl.textContent = email;
+    if (roleEl)   roleEl.textContent  = role.toUpperCase();
+    if (avatarEl) avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1b4332&color=d4af37&size=128&bold=true`;
 }
 
 function toggleAuthType() {
@@ -334,28 +434,57 @@ function toggleAuthType() {
 
 async function handleAuthSubmit(e) {
     e.preventDefault();
-    const email = document.getElementById('auth-email').value;
-    const pass = document.getElementById('auth-pass').value;
 
-    let success = false;
-    if (isLoginMode) {
-        success = await DataManager.login(email, pass);
-    } else {
-        const name = document.getElementById('auth-name').value;
-        success = await DataManager.register(name, email, pass);
-        if (success) {
-            alert('Registration successful! Please login.');
-            toggleAuthType();
-            return;
+    const email   = document.getElementById('auth-email').value.trim();
+    const pass    = document.getElementById('auth-pass').value;
+    const btn     = document.getElementById('auth-submit-btn');
+    const errDiv  = document.getElementById('auth-error');
+
+    // Hide previous errors
+    if (errDiv) errDiv.style.display = 'none';
+
+    // Show loading state
+    const origText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = isLoginMode ? 'Logging in...' : 'Registering...';
+    btn.style.opacity = '0.7';
+
+    function showError(msg) {
+        if (errDiv) {
+            errDiv.textContent = msg;
+            errDiv.style.display = 'block';
         }
+        btn.disabled = false;
+        btn.textContent = origText;
+        btn.style.opacity = '1';
     }
 
-    if (success) {
-        // Store email for profile display
-        localStorage.setItem('cob_user_email', email);
-        location.reload();
-    } else {
-        alert('Authentication failed. Check your credentials.');
+    try {
+        if (isLoginMode) {
+            const success = await DataManager.login(email, pass);
+            if (success) {
+                localStorage.setItem('cob_user_email', email);
+                location.reload();
+            } else {
+                showError('Invalid email or password. Please try again.');
+            }
+        } else {
+            const name = document.getElementById('auth-name').value.trim();
+            if (!name) { showError('Please enter your full name.'); return; }
+            if (pass.length < 6) { showError('Password must be at least 6 characters.'); return; }
+
+            const success = await DataManager.register(name, email, pass);
+            if (success) {
+                // Auto-login: token is already set by register(), just reload
+                localStorage.setItem('cob_user_email', email);
+                location.reload();
+            } else {
+                showError('Registration failed. Email may already be in use.');
+            }
+        }
+    } catch (err) {
+        showError('Server error. Please try again in a moment.');
+        console.error('Auth error:', err);
     }
 }
 

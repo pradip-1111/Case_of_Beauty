@@ -1,24 +1,374 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 html {
     scroll-behavior: smooth;
 }
 
 :root {
-    --primary-color: #FFB7C5;
-    /* Pastel Pink */
-    --secondary-color: #AEC6CF;
-    /* Pastel Blue */
-    --accent-color: #779ECB;
-    /* Darker Pastel Blue */
-    --text-color: #333333;
-    --light-text: #666666;
-    --white: #ffffff;
-    --background-color: #F9F9F9;
-    --border-radius: 16px;
-    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    --font-main: 'Outfit', sans-serif;
-    --sale-bg: #e11d48;
+    --primary-color:    #1b4332;   /* Deep Emerald */
+    --secondary-color:  #2d6a4f;   /* Lush Sage */
+    --accent-color:     #d4af37;   /* Botanical Gold */
+    --text-color:       #e8f5e9;   /* Light mint text */
+    --light-text:       #a8c5b5;   /* Muted sage text */
+    --white:            #ffffff;
+    --background-color: #081c15;   /* Deep forest — was #f8f9fa */
+    --card-bg:          #0d2a1e;   /* Dark card bg */
+    --card-border:      rgba(212, 175, 55, 0.15);
+    --border-radius:    16px;
+    --box-shadow:       0 8px 30px rgba(0, 0, 0, 0.4);
+    --font-main:        'Outfit', sans-serif;
+    --font-heading:     'Cormorant Garamond', serif;
+    --sale-bg:          #1b4332;
+}
+
+/* ── Global dark botanical base ─────────────────────────── */
+body {
+    background-color: #081c15;
+    color: #e8f5e9;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* All generic sections get the dark theme */
+section, .section, main {
+    background-color: #081c15;
+    color: #e8f5e9;
+}
+
+/* Light cards on dark background */
+.card, .product-card, .category-card, .review-card,
+.feature-card, .benefit-card, .info-card {
+    background: #0d2a1e !important;
+    color: #e8f5e9 !important;
+    border: 1px solid rgba(212, 175, 55, 0.15) !important;
+}
+
+/* Section headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #e8f5e9;
+}
+
+/* Gold accent headings for section titles */
+.section-title, .section-heading, [class*="section-title"] {
+    color: #d4af37 !important;
+}
+
+/* Paragraph text in dark sections */
+p { color: #a8c5b5; }
+
+/* Inputs and form fields */
+input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+select, textarea {
+    background: #0d2a1e;
+    color: #e8f5e9;
+    border-color: rgba(212, 175, 55, 0.3);
+}
+input::placeholder, textarea::placeholder { color: #6b9080; }
+
+
+/* ==========================================================================
+   PRAKRITI BOTANICAL LUXURY HERO & NAVIGATION
+   ========================================================================== */
+.prakriti-hero {
+    position: relative;
+    width: 100%;
+    min-height: 92vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.prakriti-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 3rem;
+    background: rgba(8, 28, 21, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.prakriti-logo {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: #ffffff;
+    text-transform: uppercase;
+    line-height: 1;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.brand-sub {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: #d4af37;
+    margin-top: 2px;
+    font-weight: 600;
+}
+
+.prakriti-nav {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.prakriti-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 4px 0;
+}
+
+.prakriti-link:hover, .prakriti-link.active {
+    color: #d4af37;
+}
+
+.prakriti-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #d4af37;
+    transition: width 0.3s ease;
+}
+
+.prakriti-link:hover::after, .prakriti-link.active::after {
+    width: 100%;
+}
+
+.prakriti-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.search-box-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-box-wrapper input {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 14px 8px 36px;
+    border-radius: 20px;
+    color: white;
+    font-size: 0.85rem;
+    outline: none;
+    width: 180px;
+    transition: all 0.3s ease;
+}
+
+.search-box-wrapper input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-box-wrapper input:focus {
+    width: 240px;
+    background: rgba(255, 255, 255, 0.25);
+    border-color: #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+.search-box-wrapper .search-icon {
+    position: absolute;
+    left: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+.prakriti-contact-btn {
+    background: #ffffff;
+    color: #081c15;
+    padding: 8px 22px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.prakriti-contact-btn:hover {
+    background: #d4af37;
+    color: #081c15;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.prakriti-hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem 3rem 2rem;
+    max-width: 900px;
+    margin: auto;
+}
+
+.hero-badge {
+    background: rgba(212, 175, 55, 0.2);
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    padding: 6px 18px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    margin-bottom: 1.5rem;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 3.8rem;
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.hero-desc {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 650px;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.hero-main-btn {
+    background: linear-gradient(135deg, #d4af37, #b38b25);
+    color: #081c15;
+    padding: 14px 36px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.hero-main-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(212, 175, 55, 0.6);
+}
+
+.scroll-down-btn {
+    margin-top: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 8px 24px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    background: rgba(0,0,0,0.2);
+}
+
+.scroll-down-btn:hover {
+    border-color: #d4af37;
+    color: #d4af37;
+    transform: translateY(3px);
+}
+
+/* Category Filter Tabs */
+.category-filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 1.5rem 0 2.5rem 0;
+}
+
+.filter-tab {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #2d6a4f;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.filter-tab:hover {
+    border-color: #1b4332;
+    color: #1b4332;
+    transform: translateY(-2px);
+}
+
+.filter-tab.active {
+    background: #1b4332;
+    color: #ffffff;
+    border-color: #1b4332;
+    box-shadow: 0 4px 15px rgba(27, 67, 50, 0.3);
+}
+
+@media (max-width: 900px) {
+    .prakriti-header {
+        padding: 1rem 1.5rem;
+    }
+    .prakriti-nav {
+        display: none;
+    }
+    .hero-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* Scroll Reveal & 3D Card Effects */
+.product-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transform: translateY(35px) scale(0.97);
+    will-change: opacity, transform;
+}
+
+.product-card.reveal-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 35px rgba(27, 67, 50, 0.15);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.08);
 }
 
 /* Flash Sale Banner */
@@ -3906,3 +4256,177 @@ tbody tr:hover td {
 .status-select:focus {
     border-color: #6366f1;
 }
+
+/* =====================================================================
+   🌿 DARK BOTANICAL THEME — Full Site Override
+   Applies deep forest green to all sections below the hero
+   ===================================================================== */
+
+/* ── Top announcement bar ── */
+.top-bar {
+    background: linear-gradient(90deg, #081c15, #0d2a1e, #081c15) !important;
+    color: #d4af37 !important;
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+}
+
+/* ── Ticker / scrolling text strip ── */
+.ticker-wrap, .ticker-section, [class*="ticker"], .marquee-wrapper, .marquee-section {
+    background: #0d2a1e !important;
+    color: #d4af37 !important;
+    border-top: 1px solid rgba(212,175,55,0.2);
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+}
+.ticker-wrap span, .ticker-section span, [class*="ticker"] span {
+    color: #d4af37 !important;
+}
+
+/* ── Feature / benefit icon strip ── */
+.features-section, .benefits-section, .feature-strip,
+[class*="feature"], [class*="benefit"] {
+    background: #081c15 !important;
+    color: #e8f5e9 !important;
+}
+.feature-icon, .benefit-icon { color: #d4af37 !important; }
+.feature-title, .benefit-title { color: #e8f5e9 !important; }
+.feature-desc, .benefit-desc  { color: #a8c5b5 !important; }
+
+/* ── Category section ── */
+.category-section, #categories, [class*="category-section"] {
+    background: #081c15 !important;
+    color: #e8f5e9 !important;
+}
+.category-card {
+    background: #0d2a1e !important;
+    border: 1px solid rgba(212,175,55,0.18) !important;
+    color: #e8f5e9 !important;
+}
+.category-card:hover {
+    border-color: rgba(212,175,55,0.5) !important;
+    box-shadow: 0 8px 30px rgba(212,175,55,0.15) !important;
+}
+.category-title { color: #e8f5e9 !important; }
+
+/* ── Product shop section ── */
+#shop, .shop-section, .products-section, [class*="shop-section"] {
+    background: #081c15 !important;
+    color: #e8f5e9 !important;
+}
+
+/* ── Product cards ── */
+.product-card {
+    background: #0d2a1e !important;
+    border: 1px solid rgba(212,175,55,0.15) !important;
+    color: #e8f5e9 !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+}
+.product-card:hover {
+    border-color: rgba(212,175,55,0.45) !important;
+    box-shadow: 0 12px 40px rgba(212,175,55,0.18) !important;
+}
+.product-name, .product-title { color: #e8f5e9 !important; }
+.product-price  { color: #d4af37 !important; }
+.product-desc, .product-category { color: #a8c5b5 !important; }
+.product-tag, .tag-badge {
+    background: rgba(212,175,55,0.15) !important;
+    color: #d4af37 !important;
+    border: 1px solid rgba(212,175,55,0.3) !important;
+}
+
+/* ── Review / testimonial section ── */
+.reviews-section, #reviews-section, [class*="review-section"] {
+    background: #081c15 !important;
+    color: #e8f5e9 !important;
+}
+.review-card, .testimonial-card {
+    background: #0d2a1e !important;
+    border: 1px solid rgba(212,175,55,0.15) !important;
+    color: #e8f5e9 !important;
+}
+.review-name, .reviewer-name { color: #d4af37 !important; }
+.review-text, .testimonial-text { color: #a8c5b5 !important; }
+
+/* ── Video / reel section ── */
+.video-section, #videos, [class*="video-section"] {
+    background: #081c15 !important;
+    color: #e8f5e9 !important;
+}
+
+/* ── Flash sale banner ── */
+.flash-sale-banner, #flash-sale-banner {
+    background: linear-gradient(135deg, #0d2a1e, #1b4332) !important;
+    border-top: 2px solid #d4af37 !important;
+    border-bottom: 2px solid #d4af37 !important;
+}
+
+/* ── About / story section ── */
+.about-section, #about, [class*="about"] {
+    background: #081c15 !important;
+    color: #e8f5e9 !important;
+}
+
+/* ── Dividers and separators ── */
+hr, .divider {
+    border-color: rgba(212,175,55,0.2) !important;
+}
+
+/* ── Footer ── */
+footer, .footer, #footer, .prakriti-footer {
+    background: #040e09 !important;
+    color: #a8c5b5 !important;
+    border-top: 1px solid rgba(212,175,55,0.2) !important;
+}
+footer h3, footer h4, .footer h3, .footer h4 { color: #d4af37 !important; }
+footer a, .footer a { color: #a8c5b5 !important; }
+footer a:hover, .footer a:hover { color: #d4af37 !important; }
+
+/* ── Cart sidebar ── */
+.cart-sidebar {
+    background: #0d2a1e !important;
+    color: #e8f5e9 !important;
+    border-left: 1px solid rgba(212,175,55,0.2) !important;
+}
+.cart-header { border-bottom: 1px solid rgba(212,175,55,0.2) !important; }
+.cart-item { border-bottom: 1px solid rgba(212,175,55,0.1) !important; }
+.cart-item-name { color: #e8f5e9 !important; }
+.cart-item-price { color: #d4af37 !important; }
+.cart-total-row { color: #e8f5e9 !important; border-top: 1px solid rgba(212,175,55,0.2) !important; }
+.cart-overlay { background: rgba(0,0,0,0.7) !important; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #081c15; }
+::-webkit-scrollbar-thumb { background: #2d6a4f; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #d4af37; }
+
+/* ── Section headings gold underline ── */
+.section-header, .section-title-wrap {
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* ── Badges / tags ── */
+.badge, .tag {
+    background: rgba(212,175,55,0.15) !important;
+    color: #d4af37 !important;
+}
+
+/* ── Filter / tab buttons ── */
+.filter-btn, .tab-btn, [class*="filter-btn"], [class*="tab-btn"] {
+    background: #0d2a1e !important;
+    color: #a8c5b5 !important;
+    border: 1px solid rgba(212,175,55,0.2) !important;
+}
+.filter-btn.active, .tab-btn.active,
+.filter-btn:hover, .tab-btn:hover {
+    background: #1b4332 !important;
+    color: #d4af37 !important;
+    border-color: #d4af37 !important;
+}
+
+/* ── Keep modals white (intentional contrast) ── */
+.modal-content, #auth-modal .modal-content,
+#profile-modal .modal-content {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+}
